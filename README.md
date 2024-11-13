@@ -1,1 +1,1 @@
-Generative AI Contest Project
+Generative AI Contest Project.
