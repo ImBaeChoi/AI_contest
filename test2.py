@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QPushButton
-from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QRectF  # QRectF 추가
+from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QRectF
 from PyQt5 import uic
 from PyQt5.QtGui import QMovie, QIcon, QPainterPath, QRegion
 
@@ -41,10 +41,10 @@ class WindowClass(QMainWindow, form_class):
     def loopAniFuction(self):  # 애니메이션 실행 및 ScrollArea 토글 함수
         if self.movie.state() == QMovie.Running:
             self.movie.stop()
-            self.scrollArea.setVisible(False)  # 애니메이션 중지 시 ScrollArea 숨김
+            self.scrollArea.setVisible(False)
         else: 
             self.movie.start()
-            self.scrollArea.setVisible(True)   # 애니메이션 시작 시 ScrollArea 표시
+            self.scrollArea.setVisible(True)
 
     def apply_rounded_corners(self, radius=20):  # 둥근 모서리 적용 함수
         rect = QRectF(0, 0, self.width(), self.height())
@@ -85,12 +85,12 @@ class WindowClass(QMainWindow, form_class):
 
         self.move(x, y)
 
-    def open_new_dialog(self):  # 새 창을 여는 함수
-        print("ToolButton clicked - Opening new dialog")  # 디버그 메시지
+    def open_new_dialog(self):  # 옵션 창을 여는 함수
         self.dialog = CustomDialog()
         self.dialog.show()
-        self.dialog.exec_()  # 모달 창으로 실행
+        self.dialog.exec_()
 
+# 옵션 창 클래스
 class CustomDialog(QDialog, dialog_form_class):
     def __init__(self):
         super().__init__()
@@ -99,13 +99,12 @@ class CustomDialog(QDialog, dialog_form_class):
         # 상단 바 제거
         self.setWindowFlag(Qt.FramelessWindowHint)
 
-        # toggle_btn1, toggle_btn2 초기 설정
-        self.setup_toggle_button(self.toggle_btn1)
-        self.setup_toggle_button(self.toggle_btn2)
+        # 둥근 모서리 적용
+        self.apply_rounded_corners()
 
         # 시그널 연결
-        self.toggle_btn1.clicked.connect(lambda: self.toggle(self.toggle_btn1))
-        self.toggle_btn2.clicked.connect(lambda: self.toggle(self.toggle_btn2))
+        self.toggle_btn1.clicked.connect(lambda: self.toggle(self.toggle_btn1, self.btn1_btn))
+        self.toggle_btn2.clicked.connect(lambda: self.toggle(self.toggle_btn2, self.btn2_btn))
 
     def apply_rounded_corners(self, radius=20):  # 둥근 모서리 적용 함수
         rect = QRectF(0, 0, self.width(), self.height())
@@ -114,47 +113,22 @@ class CustomDialog(QDialog, dialog_form_class):
         region = QRegion(path.toFillPolygon().toPolygon())
         self.setMask(region)
 
-    def setup_toggle_button(self, button):
-        # 초기 상태 및 스타일 설정
-        button.setCheckable(True)
-        button.setFixedSize(100, 50)
-        button.setStyleSheet("""
-            QPushButton {
-                background-color: lightgray;
-                border-radius: 25px;
-                font-weight: bold;
-            }
-        """)
-        button.setText("    OFF")
-        button.move(0, 0)
-        # 스위치 역할을 하는 작은 버튼 추가
-        button.switch = QPushButton(button)
-        button.switch.setFixedSize(40, 40)
-        button.switch.setStyleSheet("""
-            QPushButton {
-                background-color: white;
-                border-radius: 20px;
-            }
-        """)
-        button.switch.move(5, 5)  # OFF 상태 초기 위치
+    def toggle(self, button, sbtn): #옵션 버튼 함수
+        y_position = sbtn.geometry().top()
 
-    def toggle(self, button):
-        # 애니메이션 설정
         if button.isChecked():
-            # ON 상태
             button.setText("ON    ")
             button.setStyleSheet("""
                 QPushButton {
-                    background-color: #8BC34A;  /* 밝은 초록색 */
+                    background-color: #8BC34A;
                     color: white;
                     border-radius: 25px;
                     font-weight: bold;
                 }
             """)
-            start_pos = button.switch.geometry().left()
-            end_pos = 55  # 스위치 버튼이 오른쪽으로 이동할 위치 (ON 상태)
+            start_pos = sbtn.geometry().left()
+            end_pos = 95  # 스위치 버튼이 오른쪽으로 이동할 위치 (ON 상태)
         else:
-            # OFF 상태
             button.setText("    OFF")
             button.setStyleSheet("""
                 QPushButton {
@@ -164,14 +138,13 @@ class CustomDialog(QDialog, dialog_form_class):
                     font-weight: bold;
                 }
             """)
-            start_pos = button.switch.geometry().left()
-            end_pos = 5  # 스위치 버튼이 왼쪽으로 이동할 위치 (OFF 상태)
+            start_pos = sbtn.geometry().left()
+            end_pos = 45 
 
-        # 애니메이션 효과
-        self.animation = QPropertyAnimation(button.switch, b"geometry")
+        self.animation = QPropertyAnimation(sbtn, b"geometry")
         self.animation.setDuration(300)  # 애니메이션 지속 시간
-        self.animation.setStartValue(QRect(start_pos, 5, 40, 40))
-        self.animation.setEndValue(QRect(end_pos, 5, 40, 40))
+        self.animation.setStartValue(QRect(start_pos, y_position, 40, 40))
+        self.animation.setEndValue(QRect(end_pos, y_position, 40, 40))
         self.animation.start()
 
 if __name__ == "__main__":

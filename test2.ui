@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>397</width>
-    <height>498</height>
+    <width>411</width>
+    <height>544</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
   <widget class="QLabel" name="program_name">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>160</x>
      <y>10</y>
      <width>161</width>
      <height>31</height>
@@ -38,7 +38,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Program Name</string>
+    <string>vesta</string>
    </property>
   </widget>
   <widget class="QToolButton" name="toolButton">
@@ -61,66 +61,23 @@
   <widget class="QLabel" name="loopAni">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>340</y>
-     <width>128</width>
-     <height>128</height>
+     <x>140</x>
+     <y>420</y>
+     <width>101</width>
+     <height>101</height>
     </rect>
    </property>
    <property name="text">
     <string>Loop Animaition</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="answer_edit">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>160</y>
-     <width>181</width>
-     <height>41</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QTextEdit" name="command_edit">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>90</y>
-     <width>191</width>
-     <height>41</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="mic_btn">
-   <property name="geometry">
-    <rect>
-     <x>290</x>
-     <y>170</y>
-     <width>81</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>../사진 및 그림/마이크.png</normaloff>../사진 및 그림/마이크.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>50</width>
-     <height>50</height>
-    </size>
-   </property>
-  </widget>
   <widget class="QPushButton" name="hidden_mic_btn">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>340</y>
-     <width>171</width>
-     <height>141</height>
+     <x>150</x>
+     <y>430</y>
+     <width>91</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -134,6 +91,50 @@
     <string/>
    </property>
   </widget>
+  <widget class="QScrollArea" name="scrollArea">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>50</y>
+     <width>280</width>
+     <height>360</height>
+    </rect>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>278</width>
+      <height>358</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QTextEdit" name="command_edit">
+       <property name="styleSheet">
+        <string notr="true">border: 2px solid gray; border-radius: 10px; padding: 5px;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTextEdit" name="answer_edit">
+       <property name="styleSheet">
+        <string notr="true">border: 2px solid gray; border-radius: 10px; padding: 5px;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <zorder>scrollArea</zorder>
+  <zorder>program_name</zorder>
+  <zorder>toolButton</zorder>
+  <zorder>loopAni</zorder>
+  <zorder>hidden_mic_btn</zorder>
  </widget>
  <resources/>
  <connections/>
