@@ -127,9 +127,9 @@ class CustomDialog(QDialog, dialog_form_class):
                 }
             """)
             start_pos = sbtn.geometry().left()
-            end_pos = 95  # 스위치 버튼이 오른쪽으로 이동할 위치 (ON 상태)
+            end_pos = 88  # 스위치 버튼이 오른쪽으로 이동할 위치 (ON 상태)
         else:
-            button.setText("    OFF")
+            button.setText("      OFF")
             button.setStyleSheet("""
                 QPushButton {
                     background-color: lightgray;
@@ -139,7 +139,7 @@ class CustomDialog(QDialog, dialog_form_class):
                 }
             """)
             start_pos = sbtn.geometry().left()
-            end_pos = 45 
+            end_pos = 38 
 
         self.animation = QPropertyAnimation(sbtn, b"geometry")
         self.animation.setDuration(300)  # 애니메이션 지속 시간
