@@ -2,13 +2,13 @@ import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QPushButton
 from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QRectF
 from PyQt5 import uic
-from PyQt5.QtGui import QMovie, QIcon, QPainterPath, QRegion
+from PyQt5.QtGui import QMovie, QPainterPath, QRegion
 
 # 다크 모드와 라이트 모드 스타일
 DARK_MODE_STYLE = """
     QWidget {
         background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
-                                    stop: 0 #9b3d3d, stop: 1 #3b5c91); /* 어두운 핑크색에서 어두운 파란색으로 그라데이션 */
+                                    stop: 0 #9b3d3d, stop: 1 #3b5c91);
         color: white;
     }
     QPushButton {
@@ -30,14 +30,15 @@ LIGHT_MODE_STYLE = """
 """
 
 form_class = uic.loadUiType("test2.ui")[0]  # 메인 UI 로드
-dialog_form_class = uic.loadUiType("new_dialog.ui")[0]  # 옵션 UI 로드
+options_dialog_form_class = uic.loadUiType("options_dialog.ui")[0]  # 옵션 UI 로드
+
 
 class WindowClass(QMainWindow, form_class):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
-        # 루프 애니메이션 설정
+        # QMovie 초기화
         self.movie = QMovie("ani.gif")
         self.loopAni.setMovie(self.movie)
         self.movie.setSpeed(200)
@@ -65,13 +66,13 @@ class WindowClass(QMainWindow, form_class):
         self.answer_edit.textChanged.connect(self.adjust_dialog_size)
         
         # toolButton 클릭 시 새 창 열기
-        self.toolButton.clicked.connect(self.open_new_dialog)
+        self.toolButton.clicked.connect(lambda: self.open_new_dialog(CustomDialog))
 
     def loopAniFuction(self):  # 애니메이션 실행 및 ScrollArea 토글 함수
         if self.movie.state() == QMovie.Running:
             self.movie.stop()
             self.scrollArea.setVisible(False)
-        else: 
+        else:
             self.movie.start()
             self.scrollArea.setVisible(True)
 
@@ -101,23 +102,12 @@ class WindowClass(QMainWindow, form_class):
     def adjust_dialog_size(self):  # 텍스트 길이에 따른 창 높이 조정 및 우측 하단 고정 함수
         document_height = self.answer_edit.document().size().height()
         new_height = max(544, min(int(document_height) + 250, 800))
-        current_size = self.size()
+        self.resize(self.size().width(), new_height)
+        self.move_to_bottom_right()
 
-        self.resize(current_size.width(), new_height)
-
-        screen_geometry = QApplication.primaryScreen().availableGeometry()
-        screen_width = screen_geometry.width()
-        screen_height = screen_geometry.height()
-
-        x = screen_width - self.width()
-        y = screen_height - self.height()
-
-        self.move(x, y)
-
-    def open_new_dialog(self):  # 옵션 창을 여는 함수
-        self.dialog = CustomDialog(self.current_mode, self)  # 현재 모드 값을 전달
-        self.dialog.show()
-        self.dialog.exec_()
+    def open_new_dialog(self, dialog_class):
+        dialog = dialog_class(self.current_mode, self)
+        dialog.exec_()
 
     def toggle_mode(self):  # 다크 모드/라이트 모드 전환
         if self.current_mode == "light":
@@ -127,8 +117,14 @@ class WindowClass(QMainWindow, form_class):
             self.setStyleSheet(LIGHT_MODE_STYLE)  # 라이트 모드로 변경
             self.current_mode = "light"  # 현재 모드 상태를 "light"로 변경
 
-# 옵션 창 클래스
-class CustomDialog(QDialog, dialog_form_class):
+    def closeEvent(self, event):  # 애플리케이션 종료 처리
+        if self.movie.state() == QMovie.Running:
+            self.movie.stop()
+        self.movie.deleteLater()  # QMovie 자원 해제
+        super().closeEvent(event)
+
+
+class CustomDialog(QDialog, options_dialog_form_class):
     def __init__(self, current_mode, main_window):
         super().__init__()
         self.setupUi(self)
@@ -168,7 +164,7 @@ class CustomDialog(QDialog, dialog_form_class):
         y_position = sbtn.geometry().top()
 
         if button.isChecked():
-            button.setText("ON    ")
+            button.setText("ON     ")
             button.setStyleSheet("""
                 QPushButton {
                     background-color: #8BC34A;
@@ -178,9 +174,9 @@ class CustomDialog(QDialog, dialog_form_class):
                 }
             """)
             start_pos = sbtn.geometry().left()
-            end_pos = 95  # 스위치 버튼이 오른쪽으로 이동 (ON 상태)
+            end_pos = 85  # 스위치 버튼이 오른쪽으로 이동 (ON 상태)
         else:
-            button.setText("    OFF")
+            button.setText("       OFF")
             button.setStyleSheet("""
                 QPushButton {
                     background-color: lightgray;
@@ -190,7 +186,7 @@ class CustomDialog(QDialog, dialog_form_class):
                 }
             """)
             start_pos = sbtn.geometry().left()
-            end_pos = 45  # 스위치 버튼이 왼쪽으로 이동 (OFF 상태)
+            end_pos = 40  # 스위치 버튼이 왼쪽으로 이동 (OFF 상태)
 
         self.animation = QPropertyAnimation(sbtn, b"geometry")
         self.animation.setDuration(300)  # 애니메이션 지속 시간
@@ -212,8 +208,9 @@ class CustomDialog(QDialog, dialog_form_class):
             self.current_mode = "light"  # 현재 모드 상태를 "light"로 변경
             self.main_window.toggle_mode()  # 메인 창 모드도 함께 변경
 
-if __name__ == "__main__":  
+
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     myWindow = WindowClass()
     myWindow.show()
-    app.exec_()
+    sys.exit(app.exec_())

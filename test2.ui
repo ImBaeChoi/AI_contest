@@ -38,7 +38,7 @@
     </font>
    </property>
    <property name="text">
-    <string>vesta</string>
+    <string>Vesta</string>
    </property>
   </widget>
   <widget class="QToolButton" name="toolButton">
