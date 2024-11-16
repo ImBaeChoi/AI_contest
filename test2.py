@@ -1,8 +1,8 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QPushButton
-from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QRectF
+from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QRectF, QTimer
 from PyQt5 import uic
-from PyQt5.QtGui import QMovie, QPainterPath, QRegion
+from PyQt5.QtGui import QMovie, QPainterPath, QRegion, QLinearGradient, QBrush, QColor, QPalette
 
 # 다크 모드와 라이트 모드 스타일
 DARK_MODE_STYLE = """
@@ -38,12 +38,6 @@ class WindowClass(QMainWindow, form_class):
         super().__init__()
         self.setupUi(self)
 
-        # QMovie 초기화
-        self.movie = QMovie("ani.gif")
-        self.loopAni.setMovie(self.movie)
-        self.movie.setSpeed(200)
-        self.movie.start()
-        self.movie.stop()
 
         # ScrollArea를 초기에는 숨김
         self.scrollArea.setVisible(False)
@@ -62,19 +56,22 @@ class WindowClass(QMainWindow, form_class):
         self.setStyleSheet(LIGHT_MODE_STYLE)  # 초기 스타일을 라이트 모드로 설정
 
         # 시그널 연결
-        self.hidden_mic_btn.clicked.connect(self.loopAniFuction)
         self.answer_edit.textChanged.connect(self.adjust_dialog_size)
         
         # toolButton 클릭 시 새 창 열기
         self.toolButton.clicked.connect(lambda: self.open_new_dialog(CustomDialog))
 
-    def loopAniFuction(self):  # 애니메이션 실행 및 ScrollArea 토글 함수
-        if self.movie.state() == QMovie.Running:
-            self.movie.stop()
-            self.scrollArea.setVisible(False)
-        else:
-            self.movie.start()
-            self.scrollArea.setVisible(True)
+
+        self.make_widget_rounded(self.loopAni)
+        self.gradient_offset = 0
+        self.update_gradient()
+
+        # 그라데이션 애니메이션 타이머
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.animate_gradient)
+        self.timer.start(15)  # 50ms마다 실행
+
+        
 
     def apply_rounded_corners(self, radius=20):  # 둥근 모서리 적용 함수
         rect = QRectF(0, 0, self.width(), self.height())
@@ -122,7 +119,46 @@ class WindowClass(QMainWindow, form_class):
             self.movie.stop()
         self.movie.deleteLater()  # QMovie 자원 해제
         super().closeEvent(event)
+    
+    
+    def animate_gradient(self):
+        """그라데이션을 매끄럽게 주기적으로 업데이트"""
+        self.gradient_offset += 0.002  # 매우 작은 값으로 점진적으로 증가
+        if self.gradient_offset >= 3.0:  # 더 큰 범위를 사용하여 자연스러운 순환
+            self.gradient_offset -= 3.0  # 주기를 초과하면 순환되도록 설정
 
+        self.update_gradient()
+
+    def update_gradient(self):
+        """loopAni 위젯에 그라데이션 색상 업데이트"""
+        gradient = QLinearGradient(0, 0, self.loopAni.width(), self.loopAni.height())
+
+        # 색상 조합을 자연스럽게 배치하여 매끄러운 전환
+        gradient.setColorAt((self.gradient_offset + 0.0) % 1.0, QColor("#FFB3B3"))  # 밝은 핑크색
+        gradient.setColorAt((self.gradient_offset + 0.33) % 1.0, QColor("#87CEFA"))  # 하늘색
+        gradient.setColorAt((self.gradient_offset + 0.66) % 1.0, QColor("#FFB3B3"))  # 밝은 노란색
+
+        # 브러시를 설정하여 loopAni 배경 적용
+        palette = self.loopAni.palette()
+        palette.setBrush(QPalette.Background, QBrush(gradient))
+        self.loopAni.setAutoFillBackground(True)
+        self.loopAni.setPalette(palette)
+
+
+        # 브러시를 설정하여 loopAni 배경 적용
+        palette = self.loopAni.palette()
+        palette.setBrush(QPalette.Background, QBrush(gradient))
+        self.loopAni.setAutoFillBackground(True)
+        self.loopAni.setPalette(palette)
+
+
+    def make_widget_rounded(self, widget, radius=50):
+        """위젯의 모양을 둥글게 설정"""
+        rect = widget.geometry()
+        path = QPainterPath()
+        path.addRoundedRect(0, 0, rect.width(), rect.height(), radius, radius)
+        region = QRegion(path.toFillPolygon().toPolygon())
+        widget.setMask(region)
 
 class CustomDialog(QDialog, options_dialog_form_class):
     def __init__(self, current_mode, main_window):
