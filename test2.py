@@ -31,7 +31,7 @@ LIGHT_MODE_STYLE = """
 
 form_class = uic.loadUiType("test2.ui")[0]  # 메인 UI 로드
 options_dialog_form_class = uic.loadUiType("options_dialog.ui")[0]  # 옵션 UI 로드
-
+exit_dialog_form_class = uic.loadUiType("exit_dialog.ui")[0]
 
 class WindowClass(QMainWindow, form_class):
     def __init__(self):
@@ -48,25 +48,28 @@ class WindowClass(QMainWindow, form_class):
         self.move_to_bottom_right()
 
         # 초기 모드 설정
-        self.current_mode = "light"  # "light" 모드로 초기화
-        self.setStyleSheet(LIGHT_MODE_STYLE)  # 초기 스타일을 라이트 모드로 설정
+        self.current_mode = "light"
+        self.setStyleSheet(LIGHT_MODE_STYLE)
         
         # 상태 저장 변수 추가
         self.dialog_toggle_states = {"toggle_btn1": False, "toggle_btn2": False}
-        self.options_dialog = None  # options_dialog 상태를 관리하는 변수
+        self.options_dialog = None
 
         # toolButton 클릭 시 대화 상자 열거나 닫기
         self.toolButton.clicked.connect(self.toggle_options_dialog)
 
-
+        #애니메이션 관리
         self.make_widget_rounded(self.loopAni)
         self.gradient_offset = 0
         self.update_gradient()
-
-        # 그라데이션 애니메이션 타이머
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.animate_gradient)
-        self.timer.start(13)  # 50ms마다 실행
+        self.timer.start(13)
+
+        self.hidden_mic_btn.clicked.connect(self.mic)
+
+    def mic(slef):
+        print("마이크 버튼 클릭")    
 
     def apply_rounded_corners(self, radius=20):  # 둥근 모서리 적용 함수
         rect = QRectF(0, 0, self.width(), self.height())
@@ -91,35 +94,25 @@ class WindowClass(QMainWindow, form_class):
         y = screen_height - window_height
         self.move(x, y)
 
-    def open_new_dialog(self, dialog_class):
-        # CustomDialog를 생성할 때 current_mode, toggle_states, main_window를 전달
+    def open_new_dialog(self, dialog_class): #새 다이어로그 열기
         self.options_dialog = dialog_class(self.current_mode, self.dialog_toggle_states, self)
-        # 대화 상자의 위치 설정
-        main_window_geometry = self.geometry()  # 현재 메인 창의 위치와 크기 가져오기
-        x = main_window_geometry.x() - self.options_dialog.width() - 10  # 메인 창의 왼쪽에 배치, 10px 간격
-        y = main_window_geometry.y()  # 동일한 y 좌표로 배치
-        self.options_dialog.move(x, y)  # CustomDialog 위치 설정
+        main_window_geometry = self.geometry()
+        x = main_window_geometry.x() - self.options_dialog.width() - 10
+        y = main_window_geometry.y()
+        self.options_dialog.move(x, y)
         self.options_dialog.show()
 
-        # 대화 상자 종료 후 상태 저장
         self.options_dialog.finished.connect(self.save_dialog_states)
 
 
     def toggle_mode(self):  # 다크 모드/라이트 모드 전환
         if self.current_mode == "light":
-            self.setStyleSheet(DARK_MODE_STYLE)  # 다크 모드로 변경
-            self.current_mode = "dark"  # 현재 모드 상태를 "dark"로 변경
+            self.setStyleSheet(DARK_MODE_STYLE)
+            self.current_mode = "dark"
         else:
-            self.setStyleSheet(LIGHT_MODE_STYLE)  # 라이트 모드로 변경
-            self.current_mode = "light"  # 현재 모드 상태를 "light"로 변경
-
-    def closeEvent(self, event):  # 애플리케이션 종료 처리
-        if self.movie.state() == QMovie.Running:
-            self.movie.stop()
-        self.movie.deleteLater()  # QMovie 자원 해제
-        super().closeEvent(event)
-    
-    
+            self.setStyleSheet(LIGHT_MODE_STYLE)
+            self.current_mode = "light"
+     
     def animate_gradient(self):
         """그라데이션을 매끄럽게 주기적으로 업데이트"""
         self.gradient_offset += 0.002  # 매우 작은 값으로 점진적으로 증가
@@ -163,7 +156,7 @@ class WindowClass(QMainWindow, form_class):
         # 대화 상자가 열려 있으면 닫기
         if self.options_dialog and self.options_dialog.isVisible():
             self.options_dialog.close()
-            self.options_dialog = None  # 상태 초기화
+            self.options_dialog = None
         else:
             # 대화 상자가 닫혀 있으면 열기
             self.open_new_dialog(CustomDialog)
@@ -172,7 +165,7 @@ class WindowClass(QMainWindow, form_class):
         # 대화 상자 종료 시 상태 저장
         if self.options_dialog:
             self.dialog_toggle_states = self.options_dialog.get_toggle_states()
-            self.options_dialog = None  # 상태 초기화
+            self.options_dialog = None
 
 class CustomDialog(QDialog, options_dialog_form_class):
     def __init__(self, current_mode, toggle_states, main_window):
@@ -181,8 +174,8 @@ class CustomDialog(QDialog, options_dialog_form_class):
 
         # 받은 current_mode 값 설정
         self.current_mode = current_mode
-        self.main_window = main_window  # 메인 윈도우 참조
-        self.toggle_states = toggle_states  # 상태 값 가져오기
+        self.main_window = main_window
+        self.toggle_states = toggle_states
 
         # 초기 모드에 맞게 스타일 적용
         self.apply_mode(current_mode)
@@ -204,8 +197,7 @@ class CustomDialog(QDialog, options_dialog_form_class):
         self.toggle_btn2.clicked.connect(lambda: self.toggle(self.toggle_btn2, self.btn2_btn))
 
 
-    def apply_mode(self, mode):
-        """다크 모드와 라이트 모드 스타일을 설정하는 함수"""
+    def apply_mode(self, mode): #다크모드/라이트모드 설정
         if mode == "dark":
             self.setStyleSheet(DARK_MODE_STYLE)
         else:
@@ -232,7 +224,7 @@ class CustomDialog(QDialog, options_dialog_form_class):
                 }
             """)
             start_pos = sbtn.geometry().left()
-            end_pos = 85  # 스위치 버튼이 오른쪽으로 이동 (ON 상태)
+            end_pos = 85
         else:
             button.setText("       OFF")
             button.setStyleSheet("""
@@ -244,17 +236,16 @@ class CustomDialog(QDialog, options_dialog_form_class):
                 }
             """)
             start_pos = sbtn.geometry().left()
-            end_pos = 40  # 스위치 버튼이 왼쪽으로 이동 (OFF 상태)
+            end_pos = 40
 
         self.animation = QPropertyAnimation(sbtn, b"geometry")
-        self.animation.setDuration(300)  # 애니메이션 지속 시간
+        self.animation.setDuration(300)
         self.animation.setStartValue(QRect(start_pos, y_position, 40, 40))
         self.animation.setEndValue(QRect(end_pos, y_position, 40, 40))
         self.animation.start()
 
-        # 다크 모드/라이트 모드 전환
         if button == self.toggle_btn1:
-            self.toggle_mode()  # 옵션 창 내에서의 모드 변경
+            self.toggle_mode()
 
     def toggle_mode(self):  # 다크 모드/라이트 모드 전환
         if self.current_mode == "light":
@@ -296,6 +287,19 @@ class CustomDialog(QDialog, options_dialog_form_class):
             "toggle_btn2": self.toggle_btn2.isChecked()
         }
 
+class ExitClass(QMainWindow, exit_dialog_form_class):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+        self.exit_btn.clicked.connect(self.exit)
+        self.cancel_btn.clicked.connect(self.connect)
+
+    def exit(self):
+        print("Vesta를 종료합니다")
+
+    def cancel(self):
+        print("종료를 취소합니다")
 
 
 if __name__ == "__main__":

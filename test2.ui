@@ -23,9 +23,9 @@
   <widget class="QLabel" name="program_name">
    <property name="geometry">
     <rect>
-     <x>180</x>
+     <x>150</x>
      <y>10</y>
-     <width>58</width>
+     <width>111</width>
      <height>31</height>
     </rect>
    </property>
@@ -42,6 +42,9 @@
    </property>
    <property name="text">
     <string>Vesta</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QToolButton" name="toolButton">
@@ -67,8 +70,8 @@
   <widget class="QLabel" name="loopAni">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>170</y>
+     <x>168</x>
+     <y>164</y>
      <width>75</width>
      <height>75</height>
     </rect>
@@ -84,17 +87,21 @@
   <widget class="QPushButton" name="hidden_mic_btn">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>90</y>
-     <width>75</width>
-     <height>75</height>
+     <x>160</x>
+     <y>160</y>
+     <width>81</width>
+     <height>80</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: #111111</string>
+    <string notr="true">background: transparent; /* 배경 투명 */
+    border-radius: 50px;</string>
    </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="default">
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QLabel" name="text_label">
@@ -121,7 +128,7 @@ padding: 10px;</string>
   <widget class="QTextEdit" name="textEdit">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>25</x>
      <y>240</y>
      <width>361</width>
      <height>291</height>
@@ -147,9 +154,9 @@ p, li { white-space: pre-wrap; }
   <zorder>text_label</zorder>
   <zorder>program_name</zorder>
   <zorder>toolButton</zorder>
-  <zorder>hidden_mic_btn</zorder>
-  <zorder>loopAni</zorder>
   <zorder>textEdit</zorder>
+  <zorder>loopAni</zorder>
+  <zorder>hidden_mic_btn</zorder>
  </widget>
  <resources/>
  <connections/>
