@@ -23,9 +23,9 @@
   <widget class="QLabel" name="program_name">
    <property name="geometry">
     <rect>
-     <x>170</x>
+     <x>180</x>
      <y>10</y>
-     <width>51</width>
+     <width>58</width>
      <height>31</height>
     </rect>
    </property>
@@ -61,14 +61,14 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../톱니바퀴.png</normaloff>../톱니바퀴.png</iconset>
+     <normaloff>../사진 및 그림/톱니바퀴.png</normaloff>../사진 및 그림/톱니바퀴.png</iconset>
    </property>
   </widget>
   <widget class="QLabel" name="loopAni">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>430</y>
+     <x>160</x>
+     <y>170</y>
      <width>75</width>
      <height>75</height>
     </rect>
@@ -84,10 +84,10 @@
   <widget class="QPushButton" name="hidden_mic_btn">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>430</y>
-     <width>91</width>
-     <height>81</height>
+     <x>30</x>
+     <y>90</y>
+     <width>75</width>
+     <height>75</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -97,50 +97,59 @@
     <string/>
    </property>
   </widget>
-  <widget class="QScrollArea" name="scrollArea">
+  <widget class="QLabel" name="text_label">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>50</y>
-     <width>280</width>
-     <height>360</height>
+     <x>0</x>
+     <y>200</y>
+     <width>411</width>
+     <height>351</height>
     </rect>
    </property>
-   <property name="widgetResizable">
-    <bool>true</bool>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgba(255, 255, 255, 100);
+border-top-left-radius: 100px;
+border-top-right-radius: 100px;
+border-bottom-left-radius: 0px;
+border-bottom-right-radius: 0px;
+padding: 10px;</string>
    </property>
-   <widget class="QWidget" name="scrollAreaWidgetContents">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>278</width>
-      <height>358</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QTextEdit" name="command_edit">
-       <property name="styleSheet">
-        <string notr="true">border: 2px solid gray; border-radius: 10px; padding: 5px;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTextEdit" name="answer_edit">
-       <property name="styleSheet">
-        <string notr="true">border: 2px solid gray; border-radius: 10px; padding: 5px;</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
+   <property name="text">
+    <string/>
+   </property>
   </widget>
-  <zorder>scrollArea</zorder>
+  <widget class="QTextEdit" name="textEdit">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>240</y>
+     <width>361</width>
+     <height>291</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgba(0,0,0,0); border : none;</string>
+   </property>
+   <property name="html">
+    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <zorder>text_label</zorder>
   <zorder>program_name</zorder>
   <zorder>toolButton</zorder>
   <zorder>hidden_mic_btn</zorder>
   <zorder>loopAni</zorder>
+  <zorder>textEdit</zorder>
  </widget>
  <resources/>
  <connections/>

@@ -38,10 +38,6 @@ class WindowClass(QMainWindow, form_class):
         super().__init__()
         self.setupUi(self)
 
-
-        # ScrollArea를 초기에는 숨김
-        self.scrollArea.setVisible(False)
-
         # 상단 바 제거
         self.setWindowFlag(Qt.FramelessWindowHint)
 
@@ -54,10 +50,10 @@ class WindowClass(QMainWindow, form_class):
         # 초기 모드 설정
         self.current_mode = "light"  # "light" 모드로 초기화
         self.setStyleSheet(LIGHT_MODE_STYLE)  # 초기 스타일을 라이트 모드로 설정
-
-        # 시그널 연결
-        self.answer_edit.textChanged.connect(self.adjust_dialog_size)
         
+        # 상태 저장 변수 추가
+        self.dialog_toggle_states = {"toggle_btn1": False, "toggle_btn2": False}
+
         # toolButton 클릭 시 새 창 열기
         self.toolButton.clicked.connect(lambda: self.open_new_dialog(CustomDialog))
 
@@ -69,9 +65,7 @@ class WindowClass(QMainWindow, form_class):
         # 그라데이션 애니메이션 타이머
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.animate_gradient)
-        self.timer.start(15)  # 50ms마다 실행
-
-        
+        self.timer.start(13)  # 50ms마다 실행
 
     def apply_rounded_corners(self, radius=20):  # 둥근 모서리 적용 함수
         rect = QRectF(0, 0, self.width(), self.height())
@@ -96,15 +90,19 @@ class WindowClass(QMainWindow, form_class):
         y = screen_height - window_height
         self.move(x, y)
 
-    def adjust_dialog_size(self):  # 텍스트 길이에 따른 창 높이 조정 및 우측 하단 고정 함수
-        document_height = self.answer_edit.document().size().height()
-        new_height = max(544, min(int(document_height) + 250, 800))
-        self.resize(self.size().width(), new_height)
-        self.move_to_bottom_right()
-
     def open_new_dialog(self, dialog_class):
-        dialog = dialog_class(self.current_mode, self)
+        # CustomDialog를 생성할 때 current_mode, toggle_states, main_window를 전달
+        dialog = dialog_class(self.current_mode, self.dialog_toggle_states, self)
+        # 대화 상자의 위치 설정
+        main_window_geometry = self.geometry()  # 현재 메인 창의 위치와 크기 가져오기
+        x = main_window_geometry.x() - dialog.width() - 10  # 메인 창의 왼쪽에 배치, 10px 간격
+        y = main_window_geometry.y()  # 동일한 y 좌표로 배치
+        dialog.move(x, y)  # CustomDialog 위치 설정
         dialog.exec_()
+
+        # 대화 상자 종료 후 상태 저장
+        self.dialog_toggle_states = dialog.get_toggle_states()
+
 
     def toggle_mode(self):  # 다크 모드/라이트 모드 전환
         if self.current_mode == "light":
@@ -161,13 +159,14 @@ class WindowClass(QMainWindow, form_class):
         widget.setMask(region)
 
 class CustomDialog(QDialog, options_dialog_form_class):
-    def __init__(self, current_mode, main_window):
+    def __init__(self, current_mode, toggle_states, main_window):
         super().__init__()
         self.setupUi(self)
 
         # 받은 current_mode 값 설정
         self.current_mode = current_mode
         self.main_window = main_window  # 메인 윈도우 참조
+        self.toggle_states = toggle_states  # 상태 값 가져오기
 
         # 초기 모드에 맞게 스타일 적용
         self.apply_mode(current_mode)
@@ -178,9 +177,17 @@ class CustomDialog(QDialog, options_dialog_form_class):
         # 둥근 모서리 적용
         self.apply_rounded_corners()
 
+        # 상태 복원
+        self.toggle_btn1.setChecked(self.toggle_states["toggle_btn1"])
+        self.toggle_btn2.setChecked(self.toggle_states["toggle_btn2"])
+        self.update_toggle_style(self.toggle_btn1, self.btn1_btn)
+        self.update_toggle_style(self.toggle_btn2, self.btn2_btn)
+
         # 시그널 연결
         self.toggle_btn1.clicked.connect(lambda: self.toggle(self.toggle_btn1, self.btn1_btn))
         self.toggle_btn2.clicked.connect(lambda: self.toggle(self.toggle_btn2, self.btn2_btn))
+
+        self.close_btn.clicked.connect(self.close)
 
     def apply_mode(self, mode):
         """다크 모드와 라이트 모드 스타일을 설정하는 함수"""
@@ -243,6 +250,37 @@ class CustomDialog(QDialog, options_dialog_form_class):
             self.setStyleSheet(LIGHT_MODE_STYLE)  # 라이트 모드로 변경
             self.current_mode = "light"  # 현재 모드 상태를 "light"로 변경
             self.main_window.toggle_mode()  # 메인 창 모드도 함께 변경
+
+    def update_toggle_style(self, button, sbtn):  # 버튼 스타일 업데이트
+        if button.isChecked():
+            button.setText("ON     ")
+            button.setStyleSheet("""
+                QPushButton {
+                    background-color: #8BC34A;
+                    color: white;
+                    border-radius: 25px;
+                    font-weight: bold;
+                }
+            """)
+            sbtn.setGeometry(85, sbtn.geometry().top(), 40, 40)  # 오른쪽으로 이동
+        else:
+            button.setText("       OFF")
+            button.setStyleSheet("""
+                QPushButton {
+                    background-color: lightgray;
+                    color: black;
+                    border-radius: 25px;
+                    font-weight: bold;
+                }
+            """)
+            sbtn.setGeometry(40, sbtn.geometry().top(), 40, 40)  # 왼쪽으로 이동
+
+    def get_toggle_states(self):  # 현재 토글 버튼 상태 반환
+        return {
+            "toggle_btn1": self.toggle_btn1.isChecked(),
+            "toggle_btn2": self.toggle_btn2.isChecked()
+        }
+
 
 
 if __name__ == "__main__":
