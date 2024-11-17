@@ -53,9 +53,10 @@ class WindowClass(QMainWindow, form_class):
         
         # 상태 저장 변수 추가
         self.dialog_toggle_states = {"toggle_btn1": False, "toggle_btn2": False}
+        self.options_dialog = None  # options_dialog 상태를 관리하는 변수
 
-        # toolButton 클릭 시 새 창 열기
-        self.toolButton.clicked.connect(lambda: self.open_new_dialog(CustomDialog))
+        # toolButton 클릭 시 대화 상자 열거나 닫기
+        self.toolButton.clicked.connect(self.toggle_options_dialog)
 
 
         self.make_widget_rounded(self.loopAni)
@@ -92,16 +93,16 @@ class WindowClass(QMainWindow, form_class):
 
     def open_new_dialog(self, dialog_class):
         # CustomDialog를 생성할 때 current_mode, toggle_states, main_window를 전달
-        dialog = dialog_class(self.current_mode, self.dialog_toggle_states, self)
+        self.options_dialog = dialog_class(self.current_mode, self.dialog_toggle_states, self)
         # 대화 상자의 위치 설정
         main_window_geometry = self.geometry()  # 현재 메인 창의 위치와 크기 가져오기
-        x = main_window_geometry.x() - dialog.width() - 10  # 메인 창의 왼쪽에 배치, 10px 간격
+        x = main_window_geometry.x() - self.options_dialog.width() - 10  # 메인 창의 왼쪽에 배치, 10px 간격
         y = main_window_geometry.y()  # 동일한 y 좌표로 배치
-        dialog.move(x, y)  # CustomDialog 위치 설정
-        dialog.exec_()
+        self.options_dialog.move(x, y)  # CustomDialog 위치 설정
+        self.options_dialog.show()
 
         # 대화 상자 종료 후 상태 저장
-        self.dialog_toggle_states = dialog.get_toggle_states()
+        self.options_dialog.finished.connect(self.save_dialog_states)
 
 
     def toggle_mode(self):  # 다크 모드/라이트 모드 전환
@@ -158,6 +159,21 @@ class WindowClass(QMainWindow, form_class):
         region = QRegion(path.toFillPolygon().toPolygon())
         widget.setMask(region)
 
+    def toggle_options_dialog(self):
+        # 대화 상자가 열려 있으면 닫기
+        if self.options_dialog and self.options_dialog.isVisible():
+            self.options_dialog.close()
+            self.options_dialog = None  # 상태 초기화
+        else:
+            # 대화 상자가 닫혀 있으면 열기
+            self.open_new_dialog(CustomDialog)
+
+    def save_dialog_states(self):
+        # 대화 상자 종료 시 상태 저장
+        if self.options_dialog:
+            self.dialog_toggle_states = self.options_dialog.get_toggle_states()
+            self.options_dialog = None  # 상태 초기화
+
 class CustomDialog(QDialog, options_dialog_form_class):
     def __init__(self, current_mode, toggle_states, main_window):
         super().__init__()
@@ -187,7 +203,6 @@ class CustomDialog(QDialog, options_dialog_form_class):
         self.toggle_btn1.clicked.connect(lambda: self.toggle(self.toggle_btn1, self.btn1_btn))
         self.toggle_btn2.clicked.connect(lambda: self.toggle(self.toggle_btn2, self.btn2_btn))
 
-        self.close_btn.clicked.connect(self.close)
 
     def apply_mode(self, mode):
         """다크 모드와 라이트 모드 스타일을 설정하는 함수"""
