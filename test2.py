@@ -1,8 +1,8 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QPushButton
+from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog
 from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QRectF, QTimer,QPointF
 from PyQt5 import uic
-from PyQt5.QtGui import QMovie, QPainterPath, QRegion, QLinearGradient, QBrush, QColor, QPalette
+from PyQt5.QtGui import QPainterPath, QRegion, QLinearGradient, QBrush, QColor, QPalette
 
 # 다크 모드와 라이트 모드 스타일
 DARK_MODE_STYLE = """
@@ -71,13 +71,12 @@ class WindowClass(QMainWindow, form_class):
         self.hidden_mic_btn.clicked.connect(self.animate_widgets)
         self.animations = []
 
-    def animate_widgets(self):
-        print("마이크 클릭")
-        """hidden_mic_btn 클릭 시 애니메이션 실행"""
+    # 텍스트 레이블 애니메이션
+    def animate_widgets(self): 
         self.hidden_mic_click_count += 1
 
         if self.hidden_mic_click_count == 2:  # 두 번째 클릭 시 애니메이션 실행
-            widgets = [self.hidden_mic_btn, self.loopAni, self.textEdit, self.text_label]
+            widgets = [self.hidden_mic_btn, self.loopAni, self.textEdit,self.textEdit_2,self.textEdit_3, self.text_label, self.textlabel_2,self.textlabel_3,self.textlabel_4]
 
             for widget in widgets:
                 y_start = widget.geometry().y()
@@ -89,7 +88,7 @@ class WindowClass(QMainWindow, form_class):
                 animation = QPropertyAnimation(widget, b"geometry")
                 animation.setDuration(500)  # 애니메이션 지속 시간 (밀리초)
                 animation.setStartValue(QRect(x, y_start, width, height))
-                animation.setEndValue(QRect(x, y_start - 218, width, height))
+                animation.setEndValue(QRect(x, y_start - 300, width, height))
                 
                 # 애니메이션 실행 및 저장
                 animation.start()

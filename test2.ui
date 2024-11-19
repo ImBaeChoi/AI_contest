@@ -75,7 +75,7 @@ border-bottom-right-radius: 0px;</string>
    <property name="geometry">
     <rect>
      <x>168</x>
-     <y>384</y>
+     <y>386</y>
      <width>75</width>
      <height>75</height>
     </rect>
@@ -93,7 +93,7 @@ border: none;</string>
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>380</y>
+     <y>382</y>
      <width>81</width>
      <height>80</height>
     </rect>
@@ -113,9 +113,9 @@ border: none;</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>413</y>
+     <y>415</y>
      <width>411</width>
-     <height>351</height>
+     <height>430</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -133,10 +133,10 @@ padding: 10px;</string>
   <widget class="QTextEdit" name="textEdit">
    <property name="geometry">
     <rect>
-     <x>25</x>
-     <y>460</y>
-     <width>361</width>
-     <height>291</height>
+     <x>36</x>
+     <y>469</y>
+     <width>339</width>
+     <height>68</height>
     </rect>
    </property>
    <property name="font">
@@ -146,7 +146,8 @@ padding: 10px;</string>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color:rgba(0,0,0,0); border : none;</string>
+    <string notr="true">border-color:#111111;
+border-radius: 25px;</string>
    </property>
    <property name="html">
     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -156,12 +157,119 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
+  <widget class="QTextEdit" name="textEdit_2">
+   <property name="geometry">
+    <rect>
+     <x>36</x>
+     <y>549</y>
+     <width>339</width>
+     <height>68</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-color:#111111;
+border-radius: 25px;</string>
+   </property>
+   <property name="html">
+    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textEdit_3">
+   <property name="geometry">
+    <rect>
+     <x>36</x>
+     <y>629</y>
+     <width>339</width>
+     <height>252</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-color:#111111;
+border-radius: 25px;</string>
+   </property>
+   <property name="html">
+    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textlabel_2">
+   <property name="geometry">
+    <rect>
+     <x>25</x>
+     <y>465</y>
+     <width>361</width>
+     <height>72</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius: 25px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textlabel_3">
+   <property name="geometry">
+    <rect>
+     <x>25</x>
+     <y>545</y>
+     <width>361</width>
+     <height>72</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius: 25px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="textlabel_4">
+   <property name="geometry">
+    <rect>
+     <x>25</x>
+     <y>625</y>
+     <width>361</width>
+     <height>256</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius: 25px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
   <zorder>text_label</zorder>
   <zorder>program_name</zorder>
   <zorder>toolButton</zorder>
-  <zorder>textEdit</zorder>
   <zorder>loopAni</zorder>
   <zorder>hidden_mic_btn</zorder>
+  <zorder>textlabel_2</zorder>
+  <zorder>textlabel_3</zorder>
+  <zorder>textlabel_4</zorder>
+  <zorder>textEdit</zorder>
+  <zorder>textEdit_2</zorder>
+  <zorder>textEdit_3</zorder>
  </widget>
  <resources/>
  <connections/>
