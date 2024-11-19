@@ -71,14 +71,15 @@
    <property name="geometry">
     <rect>
      <x>168</x>
-     <y>164</y>
+     <y>384</y>
      <width>75</width>
      <height>75</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background: transparent; /* 배경 투명 */
-    border-radius: 50px;</string>
+    <string notr="true">border-radius: 50px;
+background: transparent; 
+border: none;</string>
    </property>
    <property name="text">
     <string/>
@@ -88,7 +89,7 @@
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>160</y>
+     <y>380</y>
      <width>81</width>
      <height>80</height>
     </rect>
@@ -108,7 +109,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>200</y>
+     <y>413</y>
      <width>411</width>
      <height>351</height>
     </rect>
@@ -129,7 +130,7 @@ padding: 10px;</string>
    <property name="geometry">
     <rect>
      <x>25</x>
-     <y>240</y>
+     <y>460</y>
      <width>361</width>
      <height>291</height>
     </rect>

@@ -64,12 +64,36 @@ class WindowClass(QMainWindow, form_class):
         self.update_gradient()
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.animate_gradient)
-        self.timer.start(13)
+        self.timer.start(8)
 
-        self.hidden_mic_btn.clicked.connect(self.mic)
+         # hidden_mic_btn 클릭 횟수 추적 초기화
+        self.hidden_mic_click_count = 0  # 클릭 횟수 초기화
+        self.hidden_mic_btn.clicked.connect(self.animate_widgets)
+        self.animations = []
 
-    def mic(slef):
-        print("마이크 버튼 클릭")    
+    def animate_widgets(self):
+        print("마이크 클릭")
+        """hidden_mic_btn 클릭 시 애니메이션 실행"""
+        self.hidden_mic_click_count += 1
+
+        if self.hidden_mic_click_count == 2:  # 두 번째 클릭 시 애니메이션 실행
+            widgets = [self.hidden_mic_btn, self.loopAni, self.textEdit, self.text_label]
+
+            for widget in widgets:
+                y_start = widget.geometry().y()
+                x = widget.geometry().x()
+                width = widget.geometry().width()
+                height = widget.geometry().height()
+
+                # 애니메이션 생성 및 설정
+                animation = QPropertyAnimation(widget, b"geometry")
+                animation.setDuration(500)  # 애니메이션 지속 시간 (밀리초)
+                animation.setStartValue(QRect(x, y_start, width, height))
+                animation.setEndValue(QRect(x, y_start - 218, width, height))
+                
+                # 애니메이션 실행 및 저장
+                animation.start()
+                self.animations.append(animation)  # 애니메이션을 인스턴스 변수에 저장
 
     def apply_rounded_corners(self, radius=20):  # 둥근 모서리 적용 함수
         rect = QRectF(0, 0, self.width(), self.height())
@@ -129,6 +153,7 @@ class WindowClass(QMainWindow, form_class):
         gradient.setColorAt((self.gradient_offset + 0.0) % 1.0, QColor("#FFB3B3"))  # 밝은 핑크색
         gradient.setColorAt((self.gradient_offset + 0.33) % 1.0, QColor("#87CEFA"))  # 하늘색
         gradient.setColorAt((self.gradient_offset + 0.66) % 1.0, QColor("#FFB3B3"))  # 밝은 노란색
+
 
         # 브러시를 설정하여 loopAni 배경 적용
         palette = self.loopAni.palette()
