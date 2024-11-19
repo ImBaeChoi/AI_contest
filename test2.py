@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QPushButton
-from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QRectF, QTimer
+from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QRectF, QTimer,QPointF
 from PyQt5 import uic
 from PyQt5.QtGui import QMovie, QPainterPath, QRegion, QLinearGradient, QBrush, QColor, QPalette
 
@@ -95,12 +95,22 @@ class WindowClass(QMainWindow, form_class):
                 animation.start()
                 self.animations.append(animation)  # 애니메이션을 인스턴스 변수에 저장
 
-    def apply_rounded_corners(self, radius=20):  # 둥근 모서리 적용 함수
+    def apply_rounded_corners(self, radius=20):  # 상단 모서리만 둥글게 적용
         rect = QRectF(0, 0, self.width(), self.height())
         path = QPainterPath()
-        path.addRoundedRect(rect, radius, radius)
+    
+        # 상단 모서리만 둥글게 설정
+        path.moveTo(rect.topLeft() + QPointF(radius, 0))
+        path.lineTo(rect.topRight() - QPointF(radius, 0))
+        path.quadTo(rect.topRight(), rect.topRight() + QPointF(0, radius))
+        path.lineTo(rect.bottomRight())
+        path.lineTo(rect.bottomLeft())
+        path.lineTo(rect.topLeft() + QPointF(0, radius))
+        path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(radius, 0))
+    
         region = QRegion(path.toFillPolygon().toPolygon())
         self.setMask(region)
+
 
     def resizeEvent(self, event):  # 창 크기 변경 시 둥근 모서리 재적용
         super().resizeEvent(event)
@@ -149,25 +159,21 @@ class WindowClass(QMainWindow, form_class):
         """loopAni 위젯에 그라데이션 색상 업데이트"""
         gradient = QLinearGradient(0, 0, self.loopAni.width(), self.loopAni.height())
 
-        # 색상 조합을 자연스럽게 배치하여 매끄러운 전환
-        gradient.setColorAt((self.gradient_offset + 0.0) % 1.0, QColor("#FFB3B3"))  # 밝은 핑크색
-        gradient.setColorAt((self.gradient_offset + 0.33) % 1.0, QColor("#87CEFA"))  # 하늘색
-        gradient.setColorAt((self.gradient_offset + 0.66) % 1.0, QColor("#FFB3B3"))  # 밝은 노란색
+        if self.current_mode == "light":
+            # 라이트 모드 색상
+            gradient.setColorAt((self.gradient_offset + 0.0) % 1.0, QColor("#FFB3B3"))
+            gradient.setColorAt((self.gradient_offset + 0.33) % 1.0, QColor("#87CEFA"))
+            gradient.setColorAt((self.gradient_offset + 0.66) % 1.0, QColor("#FFB3B3"))
+        else:
+            # 다크 모드 색상
+            gradient.setColorAt((self.gradient_offset + 0.0) % 1.0, QColor("#9B3D3D"))
+            gradient.setColorAt((self.gradient_offset + 0.33) % 1.0, QColor("#3B5C91"))
+            gradient.setColorAt((self.gradient_offset + 0.66) % 1.0, QColor("#9B3D3D"))
 
-
-        # 브러시를 설정하여 loopAni 배경 적용
         palette = self.loopAni.palette()
         palette.setBrush(QPalette.Background, QBrush(gradient))
         self.loopAni.setAutoFillBackground(True)
         self.loopAni.setPalette(palette)
-
-
-        # 브러시를 설정하여 loopAni 배경 적용
-        palette = self.loopAni.palette()
-        palette.setBrush(QPalette.Background, QBrush(gradient))
-        self.loopAni.setAutoFillBackground(True)
-        self.loopAni.setPalette(palette)
-
 
     def make_widget_rounded(self, widget, radius=50):
         """위젯의 모양을 둥글게 설정"""

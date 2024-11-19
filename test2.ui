@@ -18,7 +18,11 @@
     <normaloff>../사진 및 그림/icon.png</normaloff>../사진 및 그림/icon.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color : #FFFFFF;</string>
+   <string notr="true">background-color : #FFFFFF;
+border-top-left-radius: 100px;
+border-top-right-radius: 100px;
+border-bottom-left-radius: 0px;
+border-bottom-right-radius: 0px;</string>
   </property>
   <widget class="QLabel" name="program_name">
    <property name="geometry">
