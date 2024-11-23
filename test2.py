@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog
+from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QGraphicsDropShadowEffect, QWidget, QPushButton
 from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QRectF, QTimer,QPointF
 from PyQt5 import uic
 from PyQt5.QtGui import QPainterPath, QRegion, QLinearGradient, QBrush, QColor, QPalette
@@ -8,30 +8,63 @@ from PyQt5.QtGui import QPainterPath, QRegion, QLinearGradient, QBrush, QColor, 
 DARK_MODE_STYLE = """
     QWidget {
         background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
-                                    stop: 0 #9b3d3d, stop: 1 #3b5c91);
+                                    stop: 0 #2E2E2E, stop: 1 #5C2C6D);
+        color: white;
+    }
+    QDialog {
+        background-color: #19181d;  /* Dialog 배경색 설정 */
         color: white;
     }
     QPushButton {
-        background-color: #333;
+        background-color: #6A5ACD;
         color: white;
         border-radius: 5px;
+    }
+    QLabel {
+        background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
+                                    stop: 0 #2c2c2c, stop: 1 #1a1a1a); /* 어두운 그라데이션 */
+        color: white;  /* 텍스트 색상 */
+    }
+    QTextEdit {
+        background-color: #1a1a1a;  /* 검은색에 가까운 회색 */
+        color: white;  /* 텍스트 색상 */
+        border: none;  /* 테두리 없음 */
+    }
+    #textlabel_2, #textlabel_3, #textlabel_4 {
+        background-color: #19181d; /* 다크 모드에서 어두운 배경 */
+        color: white;  /* 텍스트는 흰색 */
+        border: 1px solid #444; /* 약간의 테두리 */
     }
 """
 LIGHT_MODE_STYLE = """
     QWidget {
-        background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffb3b3, stop: 1 #87cefa);
+        background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
+                                    stop: 0 #BEE3F8, stop: 1 #FFECB3);
+        color: black;
+    }
+    QDialog {
+        background-color: #F2F2F2;  /* Dialog 배경색 설정 */
         color: black;
     }
     QPushButton {
-        background-color: #f0f0f0;
+        background-color: #FFD700;
         color: black;
         border-radius: 5px;
+    }
+     QLabel {
+        background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
+                                    stop: 0 #ffe4e1, stop: 1 #f0f8ff); /* 밝은 그라데이션 */
+        color: black;  /* 텍스트 색상 */
+    }
+    QTextEdit {
+        background-color: #f5f5f5;  /* 라이트 모드에서 연한 회색 */
+        color: black;  /* 텍스트 색상 */
+        border: none;  /* 테두리 없음 */
     }
 """
 
 form_class = uic.loadUiType("test2.ui")[0]  # 메인 UI 로드
 options_dialog_form_class = uic.loadUiType("options_dialog.ui")[0]  # 옵션 UI 로드
-exit_dialog_form_class = uic.loadUiType("exit_dialog.ui")[0]
 
 class WindowClass(QMainWindow, form_class):
     def __init__(self):
@@ -71,6 +104,11 @@ class WindowClass(QMainWindow, form_class):
         self.hidden_mic_btn.clicked.connect(self.animate_widgets)
         self.animations = []
 
+        # 여러 위젯에 그림자 효과 추가
+        self.add_shadow_effect("textlabel_2")
+        self.add_shadow_effect("textlabel_3")
+        self.add_shadow_effect("textlabel_4")
+
     # 텍스트 레이블 애니메이션
     def animate_widgets(self): 
         self.hidden_mic_click_count += 1
@@ -88,28 +126,18 @@ class WindowClass(QMainWindow, form_class):
                 animation = QPropertyAnimation(widget, b"geometry")
                 animation.setDuration(500)  # 애니메이션 지속 시간 (밀리초)
                 animation.setStartValue(QRect(x, y_start, width, height))
-                animation.setEndValue(QRect(x, y_start - 300, width, height))
+                animation.setEndValue(QRect(x, y_start - 460, width, height))
                 
                 # 애니메이션 실행 및 저장
                 animation.start()
                 self.animations.append(animation)  # 애니메이션을 인스턴스 변수에 저장
 
-    def apply_rounded_corners(self, radius=20):  # 상단 모서리만 둥글게 적용
+    def apply_rounded_corners(self, radius=20):  # 둥근 모서리 적용 함수
         rect = QRectF(0, 0, self.width(), self.height())
         path = QPainterPath()
-    
-        # 상단 모서리만 둥글게 설정
-        path.moveTo(rect.topLeft() + QPointF(radius, 0))
-        path.lineTo(rect.topRight() - QPointF(radius, 0))
-        path.quadTo(rect.topRight(), rect.topRight() + QPointF(0, radius))
-        path.lineTo(rect.bottomRight())
-        path.lineTo(rect.bottomLeft())
-        path.lineTo(rect.topLeft() + QPointF(0, radius))
-        path.quadTo(rect.topLeft(), rect.topLeft() + QPointF(radius, 0))
-    
+        path.addRoundedRect(rect, radius, radius)
         region = QRegion(path.toFillPolygon().toPolygon())
         self.setMask(region)
-
 
     def resizeEvent(self, event):  # 창 크기 변경 시 둥근 모서리 재적용
         super().resizeEvent(event)
@@ -124,7 +152,7 @@ class WindowClass(QMainWindow, form_class):
         window_height = self.height()
 
         x = screen_width - window_width
-        y = screen_height - window_height
+        y = screen_height - window_height -25
         self.move(x, y)
 
     def open_new_dialog(self, dialog_class): #새 다이어로그 열기
@@ -196,6 +224,21 @@ class WindowClass(QMainWindow, form_class):
         if self.options_dialog:
             self.dialog_toggle_states = self.options_dialog.get_toggle_states()
             self.options_dialog = None
+
+    def add_shadow_effect(self, object_name):
+        """지정된 objectName의 위젯에 그림자 효과를 추가"""
+        # objectName에 해당하는 위젯 찾기
+        target_widget = self.findChild(QWidget, object_name)
+        if target_widget:
+            shadow_effect = QGraphicsDropShadowEffect(self)
+            shadow_effect.setBlurRadius(20)  # 그림자 퍼짐 정도
+            shadow_effect.setXOffset(5)  # X축 이동
+            shadow_effect.setYOffset(5)  # Y축 이동
+            shadow_effect.setColor(QColor(0, 0, 0, 180))  # 그림자 색상 (검정색, 투명도 160)
+            
+            target_widget.setGraphicsEffect(shadow_effect)
+        else:
+            print(f"Warning: Widget with objectName '{object_name}' not found.")
 
 class CustomDialog(QDialog, options_dialog_form_class):
     def __init__(self, current_mode, toggle_states, main_window):
@@ -316,21 +359,6 @@ class CustomDialog(QDialog, options_dialog_form_class):
             "toggle_btn1": self.toggle_btn1.isChecked(),
             "toggle_btn2": self.toggle_btn2.isChecked()
         }
-
-class ExitClass(QMainWindow, exit_dialog_form_class):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-
-        self.exit_btn.clicked.connect(self.exit)
-        self.cancel_btn.clicked.connect(self.connect)
-
-    def exit(self):
-        print("Vesta를 종료합니다")
-
-    def cancel(self):
-        print("종료를 취소합니다")
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
