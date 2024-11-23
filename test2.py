@@ -7,11 +7,6 @@ from PyQt5.QtGui import QPainterPath, QRegion, QLinearGradient, QBrush, QColor, 
 # 다크 모드와 라이트 모드 스타일
 DARK_MODE_STYLE = """
     QWidget {
-        background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
-                                    stop: 0 #2E2E2E, stop: 1 #5C2C6D);
-        color: white;
-    }
-    QDialog {
         background-color: #19181d;  /* Dialog 배경색 설정 */
         color: white;
     }
@@ -38,28 +33,25 @@ DARK_MODE_STYLE = """
 """
 LIGHT_MODE_STYLE = """
     QWidget {
-        background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
-                                    stop: 0 #BEE3F8, stop: 1 #FFECB3);
+        background-color: #FFFFFF;  /* Dialog 배경색 설정 */
         color: black;
     }
-    QDialog {
-        background-color: #F2F2F2;  /* Dialog 배경색 설정 */
-        color: black;
-    }
+
     QPushButton {
         background-color: #FFD700;
         color: black;
         border-radius: 5px;
     }
-     QLabel {
+    QLabel {
         background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
                                     stop: 0 #ffe4e1, stop: 1 #f0f8ff); /* 밝은 그라데이션 */
         color: black;  /* 텍스트 색상 */
     }
+    #textlabel_2, #textlabel_3, #textlabel_4 {
+        background-color: #FFFFFF;
+    }
     QTextEdit {
-        background-color: #f5f5f5;  /* 라이트 모드에서 연한 회색 */
-        color: black;  /* 텍스트 색상 */
-        border: none;  /* 테두리 없음 */
+        background-color: #F2F2F2;
     }
 """
 

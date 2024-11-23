@@ -18,7 +18,7 @@
     <normaloff>../사진 및 그림/icon.png</normaloff>../사진 및 그림/icon.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color : #FFFFFF;
+   <string notr="true">
 border-top-left-radius: 100px;
 border-top-right-radius: 100px;
 border-bottom-left-radius: 0px;
@@ -119,7 +119,7 @@ border: none;</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgba(255, 255, 255, 100);
+    <string notr="true">
 border-top-left-radius: 100px;
 border-top-right-radius: 100px;
 border-bottom-left-radius: 0px;
@@ -221,8 +221,7 @@ p, li { white-space: pre-wrap; }
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-radius: 25px;
-background-color: #FFFFFF;</string>
+    <string notr="true">border-radius: 25px;</string>
    </property>
    <property name="text">
     <string/>
