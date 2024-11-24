@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QGraphicsDropShadowEffect, QWidget
 from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QRectF, QTimer,QEasingCurve
 from PyQt5 import uic
-from PyQt5.QtGui import QPainterPath, QRegion, QLinearGradient, QBrush, QColor, QPalette
+from PyQt5.QtGui import QPainterPath, QRegion, QLinearGradient, QBrush, QColor, QPalette, QIcon
 
 # 다크 모드와 라이트 모드 스타일
 DARK_MODE_STYLE = """
@@ -41,7 +41,7 @@ LIGHT_MODE_STYLE = """
         background-color: #FFD700;
         color: black;
         border-radius: 5px;
-    }ㅇ
+    }
     QLabel {
         background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
                                     stop: 0 #ffe4e1, stop: 1 #f0f8ff); /* 밝은 그라데이션 */
@@ -66,15 +66,18 @@ class WindowClass(QMainWindow, form_class):
         self.testbtn.clicked.connect(self.slide_out)
         self.slide_in()
 
+        # 초기 모드 설정
+        self.current_mode = "light"
+        self.setStyleSheet(LIGHT_MODE_STYLE)
+
+        # toolButton 초기 아이콘 설정
+        self.update_toolbutton_icon()
+
         # 상단 바 제거
         self.setWindowFlag(Qt.FramelessWindowHint)
 
         # 둥근 모서리 적용
         self.apply_rounded_corners()
-
-        # 초기 모드 설정
-        self.current_mode = "light"
-        self.setStyleSheet(LIGHT_MODE_STYLE)
         
         # 상태 저장 변수 추가
         self.dialog_toggle_states = {"toggle_btn1": False, "toggle_btn2": False}
@@ -104,11 +107,12 @@ class WindowClass(QMainWindow, form_class):
         self.add_shadow_effect("loopAni")
         self.add_shadow_effect("program_name")
 
+
     # 텍스트 레이블 애니메이션
     def animate_widgets(self): 
         self.hidden_mic_click_count += 1
 
-        if self.hidden_mic_click_count == 2:  # 두 번째 클릭 시 애니메이션 실행
+        if self.hidden_mic_click_count == 1:  # 두 번째 클릭 시 애니메이션 실행
             widgets = [self.hidden_mic_btn, self.loopAni, self.textEdit,self.textEdit_2,self.textEdit_3, self.text_label, self.textlabel_2,self.textlabel_3,self.textlabel_4]
 
             for widget in widgets:
@@ -156,6 +160,8 @@ class WindowClass(QMainWindow, form_class):
         else:
             self.setStyleSheet(LIGHT_MODE_STYLE)
             self.current_mode = "light"
+
+        self.update_toolbutton_icon()
      
     def animate_gradient(self):
         """그라데이션을 매끄럽게 주기적으로 업데이트"""
@@ -267,7 +273,19 @@ class WindowClass(QMainWindow, form_class):
         self.animation.setStartValue(QRect(start_x, start_y, window_width, window_height))
         self.animation.setEndValue(QRect(end_x, end_y, window_width, window_height))
         self.animation.setEasingCurve(QEasingCurve.OutCubic)
+
+        if self.options_dialog and self.options_dialog.isVisible():
+            self.options_dialog.close()
+            self.options_dialog = None
+        
         self.animation.start()
+
+    def update_toolbutton_icon(self):
+        """다크 모드/라이트 모드에 따라 toolButton 아이콘 변경"""
+        if self.current_mode == "light":
+            self.toolButton.setIcon(QIcon("light_mode_icon.png"))
+        else:
+            self.toolButton.setIcon(QIcon("dark_mode_icon.png"))
 
 class CustomDialog(QDialog, options_dialog_form_class):
     def __init__(self, current_mode, toggle_states, main_window):
