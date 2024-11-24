@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>지균이와 감자들</string>
+   <string>Vesta</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -68,7 +68,7 @@ border-bottom-right-radius: 0px;</string>
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../사진 및 그림/톱니바퀴.png</normaloff>../사진 및 그림/톱니바퀴.png</iconset>
+     <normaloff>../Desktop/NSU/Project/NSU 생성형 AI 인재양성 콘텐츠 경진대회/사진 및 그림/톱니바퀴.png</normaloff>../Desktop/NSU/Project/NSU 생성형 AI 인재양성 콘텐츠 경진대회/사진 및 그림/톱니바퀴.png</iconset>
    </property>
   </widget>
   <widget class="QLabel" name="loopAni">
@@ -161,7 +161,7 @@ p, li { white-space: pre-wrap; }
    <property name="geometry">
     <rect>
      <x>36</x>
-     <y>547</y>
+     <y>552</y>
      <width>339</width>
      <height>68</height>
     </rect>
@@ -188,9 +188,9 @@ p, li { white-space: pre-wrap; }
    <property name="geometry">
     <rect>
      <x>36</x>
-     <y>627</y>
+     <y>650</y>
      <width>339</width>
-     <height>252</height>
+     <height>356</height>
     </rect>
    </property>
    <property name="font">
@@ -231,7 +231,7 @@ p, li { white-space: pre-wrap; }
    <property name="geometry">
     <rect>
      <x>25</x>
-     <y>545</y>
+     <y>550</y>
      <width>361</width>
      <height>72</height>
     </rect>
@@ -247,9 +247,9 @@ p, li { white-space: pre-wrap; }
    <property name="geometry">
     <rect>
      <x>25</x>
-     <y>625</y>
+     <y>640</y>
      <width>361</width>
-     <height>256</height>
+     <height>360</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -257,6 +257,19 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="testbtn">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>10</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>테스트버튼</string>
    </property>
   </widget>
   <zorder>text_label</zorder>
@@ -270,6 +283,7 @@ p, li { white-space: pre-wrap; }
   <zorder>textEdit</zorder>
   <zorder>textEdit_2</zorder>
   <zorder>textEdit_3</zorder>
+  <zorder>testbtn</zorder>
  </widget>
  <resources/>
  <connections/>

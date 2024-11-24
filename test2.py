@@ -1,13 +1,13 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QGraphicsDropShadowEffect, QWidget, QPushButton
-from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QRectF, QTimer,QPointF
+from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QGraphicsDropShadowEffect, QWidget
+from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QRectF, QTimer,QEasingCurve
 from PyQt5 import uic
 from PyQt5.QtGui import QPainterPath, QRegion, QLinearGradient, QBrush, QColor, QPalette
 
 # 다크 모드와 라이트 모드 스타일
 DARK_MODE_STYLE = """
     QWidget {
-        background-color: #19181d;  /* Dialog 배경색 설정 */
+        background-color: #060913;  /* Dialog 배경색 설정 */
         color: white;
     }
     QPushButton {
@@ -17,16 +17,16 @@ DARK_MODE_STYLE = """
     }
     QLabel {
         background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
-                                    stop: 0 #2c2c2c, stop: 1 #1a1a1a); /* 어두운 그라데이션 */
+                                    stop: 0 #0D101D, stop: 1 #161926); /* 어두운 그라데이션 */
         color: white;  /* 텍스트 색상 */
     }
     QTextEdit {
-        background-color: #1a1a1a;  /* 검은색에 가까운 회색 */
+        background-color: #060913;  /* 검은색에 가까운 회색 */
         color: white;  /* 텍스트 색상 */
         border: none;  /* 테두리 없음 */
     }
     #textlabel_2, #textlabel_3, #textlabel_4 {
-        background-color: #19181d; /* 다크 모드에서 어두운 배경 */
+        background-color: #02030B; /* 다크 모드에서 어두운 배경 */
         color: white;  /* 텍스트는 흰색 */
         border: 1px solid #444; /* 약간의 테두리 */
     }
@@ -41,7 +41,7 @@ LIGHT_MODE_STYLE = """
         background-color: #FFD700;
         color: black;
         border-radius: 5px;
-    }
+    }ㅇ
     QLabel {
         background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
                                     stop: 0 #ffe4e1, stop: 1 #f0f8ff); /* 밝은 그라데이션 */
@@ -51,7 +51,7 @@ LIGHT_MODE_STYLE = """
         background-color: #FFFFFF;
     }
     QTextEdit {
-        background-color: #F2F2F2;
+        background-color: #F9F9F9;
     }
 """
 
@@ -63,14 +63,14 @@ class WindowClass(QMainWindow, form_class):
         super().__init__()
         self.setupUi(self)
 
+        self.testbtn.clicked.connect(self.slide_out)
+        self.slide_in()
+
         # 상단 바 제거
         self.setWindowFlag(Qt.FramelessWindowHint)
 
         # 둥근 모서리 적용
         self.apply_rounded_corners()
-
-        # 우측 하단 고정 위치로 이동
-        self.move_to_bottom_right()
 
         # 초기 모드 설정
         self.current_mode = "light"
@@ -100,6 +100,9 @@ class WindowClass(QMainWindow, form_class):
         self.add_shadow_effect("textlabel_2")
         self.add_shadow_effect("textlabel_3")
         self.add_shadow_effect("textlabel_4")
+        self.add_shadow_effect("toolButton")
+        self.add_shadow_effect("loopAni")
+        self.add_shadow_effect("program_name")
 
     # 텍스트 레이블 애니메이션
     def animate_widgets(self): 
@@ -134,18 +137,6 @@ class WindowClass(QMainWindow, form_class):
     def resizeEvent(self, event):  # 창 크기 변경 시 둥근 모서리 재적용
         super().resizeEvent(event)
         self.apply_rounded_corners()
-
-    def move_to_bottom_right(self):  # 우측 하단 고정 함수
-        screen_geometry = QApplication.primaryScreen().availableGeometry()
-        screen_width = screen_geometry.width()
-        screen_height = screen_geometry.height()
-
-        window_width = self.width()
-        window_height = self.height()
-
-        x = screen_width - window_width
-        y = screen_height - window_height -25
-        self.move(x, y)
 
     def open_new_dialog(self, dialog_class): #새 다이어로그 열기
         self.options_dialog = dialog_class(self.current_mode, self.dialog_toggle_states, self)
@@ -223,14 +214,60 @@ class WindowClass(QMainWindow, form_class):
         target_widget = self.findChild(QWidget, object_name)
         if target_widget:
             shadow_effect = QGraphicsDropShadowEffect(self)
-            shadow_effect.setBlurRadius(20)  # 그림자 퍼짐 정도
+            shadow_effect.setBlurRadius(50)  # 그림자 퍼짐 정도
             shadow_effect.setXOffset(5)  # X축 이동
             shadow_effect.setYOffset(5)  # Y축 이동
             shadow_effect.setColor(QColor(0, 0, 0, 180))  # 그림자 색상 (검정색, 투명도 160)
             
             target_widget.setGraphicsEffect(shadow_effect)
-        else:
-            print(f"Warning: Widget with objectName '{object_name}' not found.")
+
+    def slide_in(self): #프로그램 호출 애니메이션
+        screen_geometry = QApplication.primaryScreen().availableGeometry()
+        screen_width = screen_geometry.width()
+        screen_height = screen_geometry.height()
+
+        window_width = self.width()
+        window_height = self.height()
+
+        # 애니메이션 시작 위치
+        start_x = screen_width+10
+        start_y = screen_height - window_height - 25  # 화면 중앙 기준
+
+        # 최종 위치
+        end_x = screen_width - window_width
+        end_y = screen_height - window_height - 25
+
+        # 애니메이션 설정
+        self.animation = QPropertyAnimation(self, b"geometry")
+        self.animation.setDuration(600)
+        self.animation.setStartValue(QRect(start_x, start_y, window_width, window_height))
+        self.animation.setEndValue(QRect(end_x, end_y, window_width, window_height))
+        self.animation.setEasingCurve(QEasingCurve.OutCubic)
+        self.animation.start()
+
+    def slide_out(self): #프로그램 최소화 애니메이션
+        screen_geometry = QApplication.primaryScreen().availableGeometry()
+        screen_width = screen_geometry.width()
+        screen_height = screen_geometry.height()
+
+        window_width = self.width()
+        window_height = self.height()
+
+        # 애니메이션 시작 위치
+        start_x = screen_width - window_width
+        start_y = screen_height - window_height - 25
+
+        # 최종 위치
+        end_x = screen_width+10
+        end_y = screen_height - window_height - 25
+
+        # 애니메이션 설정
+        self.animation = QPropertyAnimation(self, b"geometry")
+        self.animation.setDuration(500)
+        self.animation.setStartValue(QRect(start_x, start_y, window_width, window_height))
+        self.animation.setEndValue(QRect(end_x, end_y, window_width, window_height))
+        self.animation.setEasingCurve(QEasingCurve.OutCubic)
+        self.animation.start()
 
 class CustomDialog(QDialog, options_dialog_form_class):
     def __init__(self, current_mode, toggle_states, main_window):
