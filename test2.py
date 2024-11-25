@@ -1,8 +1,8 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QGraphicsDropShadowEffect, QWidget
+from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QGraphicsDropShadowEffect, QWidget, QTextEdit
 from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QRectF, QTimer,QEasingCurve
 from PyQt5 import uic
-from PyQt5.QtGui import QPainterPath, QRegion, QLinearGradient, QBrush, QColor, QPalette, QIcon
+from PyQt5.QtGui import QPainterPath, QRegion, QLinearGradient, QBrush, QColor, QPalette, QIcon, QFontDatabase, QFont
 
 # 다크 모드와 라이트 모드 스타일
 DARK_MODE_STYLE = """
@@ -51,7 +51,7 @@ LIGHT_MODE_STYLE = """
         background-color: #FFFFFF;
     }
     QTextEdit {
-        background-color: #F9F9F9;
+        background-color: #F3F4F1;
     }
 """
 
@@ -62,6 +62,10 @@ class WindowClass(QMainWindow, form_class):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
+        self.apply_external_font("textEdit", "EliceDigitalCodingverH_Regular.ttf", font_size=10)
+        self.apply_external_font("textEdit_2", "EliceDigitalCodingverH_Regular.ttf", font_size=10)
+        self.apply_external_font("textEdit_3", "EliceDigitalCodingverH_Regular.ttf", font_size=10)
 
         self.testbtn.clicked.connect(self.slide_out)
         self.slide_in()
@@ -88,6 +92,7 @@ class WindowClass(QMainWindow, form_class):
 
         # 루프 애니메이션 관리
         self.make_widget_rounded(self.loopAni)
+        self.make_widget_rounded(self.loopAni_label)
         self.gradient_offset = 0
         self.update_gradient()
         self.timer = QTimer(self)
@@ -104,11 +109,11 @@ class WindowClass(QMainWindow, form_class):
         self.add_shadow_effect("textlabel_3")
         self.add_shadow_effect("textlabel_4")
         self.add_shadow_effect("toolButton")
-        self.add_shadow_effect("loopAni")
-        self.add_shadow_effect("program_name")
-        self.add_shadow_effect2("textEdit")
-        self.add_shadow_effect2("textEdit_2")
-        self.add_shadow_effect2("textEdit_3")
+        self.add_shadow_effect("loopAni_label")
+        self.add_shadow_effect("program_name",20)
+        self.add_shadow_effect("textEdit",10)
+        self.add_shadow_effect("textEdit_2",10)
+        self.add_shadow_effect("textEdit_3",10)
 
 
     # 텍스트 위젯 애니메이션
@@ -117,7 +122,7 @@ class WindowClass(QMainWindow, form_class):
 
         if self.hidden_mic_click_count == 1:
             widgets = [self.hidden_mic_btn, self.loopAni, self.textEdit, self.textEdit_2, self.textEdit_3,
-                    self.text_label, self.textlabel_2, self.textlabel_3, self.textlabel_4]
+                    self.text_label, self.textlabel_2, self.textlabel_3, self.textlabel_4, self.loopAni_label]
 
             for widget in widgets:
                 y_start = widget.geometry().y()
@@ -131,7 +136,7 @@ class WindowClass(QMainWindow, form_class):
                 animation.setStartValue(QRect(x, y_start, width, height))
 
                 # 특정 위젯에 대해 다른 애니메이션 설정
-                if widget in [self.hidden_mic_btn, self.loopAni, self.text_label]:
+                if widget in [self.hidden_mic_btn, self.loopAni, self.text_label, self.loopAni_label]:
                     animation.setEndValue(QRect(x, y_start - 500, width, height))  # 더 멀리 이동
                 else:
                     animation.setEndValue(QRect(x, y_start - 400, width, height))  # 일반 이동
@@ -222,26 +227,14 @@ class WindowClass(QMainWindow, form_class):
             self.options_dialog = None
 
         # 위젯 그림자 함수
-    def add_shadow_effect(self, object_name):
+    def add_shadow_effect(self, object_name,BlurRadius=30):
         target_widget = self.findChild(QWidget, object_name)
         if target_widget:
             shadow_effect = QGraphicsDropShadowEffect(self)
-            shadow_effect.setBlurRadius(50)  # 그림자 퍼짐 정도 (값이 클수록 더 퍼짐)
+            shadow_effect.setBlurRadius(BlurRadius)  # 그림자 퍼짐 정도 (값이 클수록 더 퍼짐)
             shadow_effect.setXOffset(0)  # X축 이동을 0으로 설정
             shadow_effect.setYOffset(0)  # Y축 이동을 0으로 설정
             shadow_effect.setColor(QColor(0, 0, 0, 180))  # 그림자 색상 (검정색, 투명도 180)
-            target_widget.setGraphicsEffect(shadow_effect)
-
-    
-    def add_shadow_effect2(self, object_name):
-        target_widget = self.findChild(QWidget, object_name)
-        if target_widget:
-            shadow_effect = QGraphicsDropShadowEffect(self)
-            shadow_effect.setBlurRadius(6)  # 그림자 퍼짐 정도
-            shadow_effect.setXOffset(0)  # X축 이동
-            shadow_effect.setYOffset(0)  # Y축 이동
-            shadow_effect.setColor(QColor(0, 0, 0, 180))  # 그림자 색상 (검정색, 투명도 160)
-            
             target_widget.setGraphicsEffect(shadow_effect)
 
     def slide_in(self): #프로그램 호출 애니메이션
@@ -305,6 +298,47 @@ class WindowClass(QMainWindow, form_class):
         else:
             self.toolButton.setIcon(QIcon("dark_mode_icon.png"))
 
+    def apply_external_font(self, widget_name, font_path, font_size=12):
+        # 폰트 로드
+        font_id = QFontDatabase.addApplicationFont(font_path)
+        if font_id == -1:
+            print(f"폰트를 로드할 수 없습니다: {font_path}")
+            return
+
+        # 폰트 패밀리 가져오기
+        font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
+        font = QFont(font_family, font_size)
+
+        # 위젯 찾기
+        text_edit = self.findChild(QTextEdit, widget_name)
+        if text_edit:
+            # QTextEdit 기본 글꼴 설정
+            text_edit.setFont(font)
+
+            # 커서가 움직이거나 입력될 때 글꼴 유지
+            text_edit.textChanged.connect(lambda: self.ensure_font_consistency(text_edit, font))
+        else:
+            print(f"위젯을 찾을 수 없습니다: {widget_name}")
+
+
+    def ensure_font_consistency(self, text_edit, font):
+        text_edit.blockSignals(True)  # 시그널 차단
+        cursor = text_edit.textCursor()
+        cursor.select(cursor.Document)  # 전체 텍스트 선택
+        format = cursor.charFormat()
+        format.setFont(font)  # 지정된 글꼴로 변경
+        cursor.setCharFormat(format)
+        text_edit.blockSignals(False)  # 시그널 복원
+
+
+    def ensure_cursor_font(self, text_edit, font):
+        cursor = text_edit.textCursor()
+        format = cursor.charFormat()
+        format.setFont(font)
+        cursor.setCharFormat(format)
+
+
+
 # 옵션 창 클래스
 class CustomDialog(QDialog, options_dialog_form_class):
     def __init__(self, current_mode, toggle_states, main_window):
@@ -334,6 +368,13 @@ class CustomDialog(QDialog, options_dialog_form_class):
         # 시그널 연결
         self.toggle_btn1.clicked.connect(lambda: self.toggle(self.toggle_btn1, self.btn1_btn))
         self.toggle_btn2.clicked.connect(lambda: self.toggle(self.toggle_btn2, self.btn2_btn))
+
+        self.add_shadow_effect("btn1_btn")
+        self.add_shadow_effect("btn2_btn")
+        self.add_shadow_effect("textEdit")
+        self.add_shadow_effect("textEdit_2")
+        self.add_shadow_effect("toggle_btn1",3)
+        self.add_shadow_effect("toggle_btn2",3)
 
 
     def apply_mode(self, mode): #다크모드/라이트모드 설정
@@ -426,6 +467,17 @@ class CustomDialog(QDialog, options_dialog_form_class):
             "toggle_btn1": self.toggle_btn1.isChecked(),
             "toggle_btn2": self.toggle_btn2.isChecked()
         }
+
+    # 위젯 그림자 함수
+    def add_shadow_effect(self, object_name,BlurRadius=30):
+        target_widget = self.findChild(QWidget, object_name)
+        if target_widget:
+            shadow_effect = QGraphicsDropShadowEffect(self)
+            shadow_effect.setBlurRadius(BlurRadius)  # 그림자 퍼짐 정도 (값이 클수록 더 퍼짐)
+            shadow_effect.setXOffset(0)  # X축 이동을 0으로 설정
+            shadow_effect.setYOffset(0)  # Y축 이동을 0으로 설정
+            shadow_effect.setColor(QColor(0, 0, 0, 180))  # 그림자 색상 (검정색, 투명도 180)
+            target_widget.setGraphicsEffect(shadow_effect)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
