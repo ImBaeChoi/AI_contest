@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>411</width>
-    <height>544</height>
+    <width>365</width>
+    <height>543</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,7 +27,7 @@ border-bottom-right-radius: 0px;</string>
   <widget class="QLabel" name="program_name">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>132</x>
      <y>10</y>
      <width>111</width>
      <height>31</height>
@@ -54,8 +54,8 @@ border-bottom-right-radius: 0px;</string>
   <widget class="QToolButton" name="toolButton">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
+     <x>5</x>
+     <y>5</y>
      <width>41</width>
      <height>31</height>
     </rect>
@@ -70,8 +70,8 @@ border-bottom-right-radius: 0px;</string>
   <widget class="QLabel" name="loopAni">
    <property name="geometry">
     <rect>
-     <x>168</x>
-     <y>386</y>
+     <x>150</x>
+     <y>336</y>
      <width>75</width>
      <height>75</height>
     </rect>
@@ -79,7 +79,8 @@ border-bottom-right-radius: 0px;</string>
    <property name="styleSheet">
     <string notr="true">border-radius: 50px;
 background: transparent; 
-border: none;</string>
+border: none;
+border: 1px solid black;</string>
    </property>
    <property name="text">
     <string/>
@@ -88,15 +89,16 @@ border: none;</string>
   <widget class="QPushButton" name="hidden_mic_btn">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>382</y>
+     <x>142</x>
+     <y>332</y>
      <width>81</width>
      <height>80</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: transparent; /* 배경 투명 */
-    border-radius: 50px;</string>
+border-radius: 50px;
+border: 1px solid black;</string>
    </property>
    <property name="text">
     <string/>
@@ -108,18 +110,16 @@ border: none;</string>
   <widget class="QLabel" name="text_label">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>415</y>
-     <width>411</width>
-     <height>590</height>
+     <x>-38</x>
+     <y>360</y>
+     <width>441</width>
+     <height>871</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-top-left-radius: 100px;
-border-top-right-radius: 100px;
-border-bottom-left-radius: 0px;
-border-bottom-right-radius: 0px;
-padding: 10px;</string>
+    <string notr="true">border-radius: 200px 200px 0 0;
+padding: 10px;
+border: 2px solid black;</string>
    </property>
    <property name="text">
     <string/>
@@ -128,9 +128,9 @@ padding: 10px;</string>
   <widget class="QTextEdit" name="textEdit">
    <property name="geometry">
     <rect>
-     <x>36</x>
-     <y>467</y>
-     <width>339</width>
+     <x>37</x>
+     <y>450</y>
+     <width>300</width>
      <height>68</height>
     </rect>
    </property>
@@ -143,7 +143,7 @@ padding: 10px;</string>
    <property name="styleSheet">
     <string notr="true">border-color:#111111;
 border-radius: 25px;
-</string>
+border: 1px solid black;</string>
    </property>
    <property name="sizeAdjustPolicy">
     <enum>QAbstractScrollArea::AdjustToContents</enum>
@@ -159,9 +159,9 @@ p, li { white-space: pre-wrap; }
   <widget class="QTextEdit" name="textEdit_2">
    <property name="geometry">
     <rect>
-     <x>36</x>
-     <y>552</y>
-     <width>339</width>
+     <x>37</x>
+     <y>550</y>
+     <width>300</width>
      <height>68</height>
     </rect>
    </property>
@@ -173,7 +173,8 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="styleSheet">
     <string notr="true">border-color:#111111;
-border-radius: 25px;</string>
+border-radius: 25px;
+border: 1px solid black;</string>
    </property>
    <property name="html">
     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -186,10 +187,10 @@ p, li { white-space: pre-wrap; }
   <widget class="QTextEdit" name="textEdit_3">
    <property name="geometry">
     <rect>
-     <x>36</x>
-     <y>650</y>
-     <width>339</width>
-     <height>356</height>
+     <x>37</x>
+     <y>654</y>
+     <width>300</width>
+     <height>275</height>
     </rect>
    </property>
    <property name="font">
@@ -200,7 +201,8 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="styleSheet">
     <string notr="true">border-color:#111111;
-border-radius: 25px;</string>
+border-radius: 25px;
+border: 1px solid black;</string>
    </property>
    <property name="html">
     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -213,14 +215,15 @@ p, li { white-space: pre-wrap; }
   <widget class="QLabel" name="textlabel_2">
    <property name="geometry">
     <rect>
-     <x>25</x>
-     <y>465</y>
-     <width>361</width>
-     <height>72</height>
+     <x>26</x>
+     <y>441</y>
+     <width>322</width>
+     <height>86</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-radius: 25px;</string>
+    <string notr="true">border-radius: 25px;
+border: 1px solid black;</string>
    </property>
    <property name="text">
     <string/>
@@ -229,14 +232,15 @@ p, li { white-space: pre-wrap; }
   <widget class="QLabel" name="textlabel_3">
    <property name="geometry">
     <rect>
-     <x>25</x>
-     <y>550</y>
-     <width>361</width>
-     <height>72</height>
+     <x>26</x>
+     <y>543</y>
+     <width>322</width>
+     <height>86</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-radius: 25px;</string>
+    <string notr="true">border-radius: 25px;
+border: 1px solid black;</string>
    </property>
    <property name="text">
     <string/>
@@ -245,14 +249,15 @@ p, li { white-space: pre-wrap; }
   <widget class="QLabel" name="textlabel_4">
    <property name="geometry">
     <rect>
-     <x>25</x>
-     <y>640</y>
-     <width>361</width>
-     <height>360</height>
+     <x>26</x>
+     <y>645</y>
+     <width>322</width>
+     <height>293</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-radius: 25px;</string>
+    <string notr="true">border-radius: 25px;
+border: 1px solid black;</string>
    </property>
    <property name="text">
     <string/>
@@ -261,7 +266,7 @@ p, li { white-space: pre-wrap; }
   <widget class="QPushButton" name="testbtn">
    <property name="geometry">
     <rect>
-     <x>280</x>
+     <x>250</x>
      <y>10</y>
      <width>93</width>
      <height>28</height>

@@ -106,6 +106,9 @@ class WindowClass(QMainWindow, form_class):
         self.add_shadow_effect("toolButton")
         self.add_shadow_effect("loopAni")
         self.add_shadow_effect("program_name")
+        self.add_shadow_effect2("textEdit")
+        self.add_shadow_effect2("textEdit_2")
+        self.add_shadow_effect2("textEdit_3")
 
 
     # 텍스트 위젯 애니메이션
@@ -113,7 +116,8 @@ class WindowClass(QMainWindow, form_class):
         self.hidden_mic_click_count += 1
 
         if self.hidden_mic_click_count == 1:
-            widgets = [self.hidden_mic_btn, self.loopAni, self.textEdit,self.textEdit_2,self.textEdit_3, self.text_label, self.textlabel_2,self.textlabel_3,self.textlabel_4]
+            widgets = [self.hidden_mic_btn, self.loopAni, self.textEdit, self.textEdit_2, self.textEdit_3,
+                    self.text_label, self.textlabel_2, self.textlabel_3, self.textlabel_4]
 
             for widget in widgets:
                 y_start = widget.geometry().y()
@@ -121,15 +125,21 @@ class WindowClass(QMainWindow, form_class):
                 width = widget.geometry().width()
                 height = widget.geometry().height()
 
-                # 애니메이션 생성 및 설정
+                # 애니메이션 생성
                 animation = QPropertyAnimation(widget, b"geometry")
                 animation.setDuration(500)  # 애니메이션 지속 시간 (밀리초)
                 animation.setStartValue(QRect(x, y_start, width, height))
-                animation.setEndValue(QRect(x, y_start - 460, width, height))
-                
+
+                # 특정 위젯에 대해 다른 애니메이션 설정
+                if widget in [self.hidden_mic_btn, self.loopAni, self.text_label]:
+                    animation.setEndValue(QRect(x, y_start - 500, width, height))  # 더 멀리 이동
+                else:
+                    animation.setEndValue(QRect(x, y_start - 400, width, height))  # 일반 이동
+
                 # 애니메이션 실행 및 저장
                 animation.start()
                 self.animations.append(animation)  # 애니메이션을 인스턴스 변수에 저장
+
 
     def apply_rounded_corners(self, radius=20):  # 둥근 모서리 적용 함수
         rect = QRectF(0, 0, self.width(), self.height())
@@ -216,9 +226,20 @@ class WindowClass(QMainWindow, form_class):
         target_widget = self.findChild(QWidget, object_name)
         if target_widget:
             shadow_effect = QGraphicsDropShadowEffect(self)
-            shadow_effect.setBlurRadius(50)  # 그림자 퍼짐 정도
-            shadow_effect.setXOffset(5)  # X축 이동
-            shadow_effect.setYOffset(5)  # Y축 이동
+            shadow_effect.setBlurRadius(50)  # 그림자 퍼짐 정도 (값이 클수록 더 퍼짐)
+            shadow_effect.setXOffset(0)  # X축 이동을 0으로 설정
+            shadow_effect.setYOffset(0)  # Y축 이동을 0으로 설정
+            shadow_effect.setColor(QColor(0, 0, 0, 180))  # 그림자 색상 (검정색, 투명도 180)
+            target_widget.setGraphicsEffect(shadow_effect)
+
+    
+    def add_shadow_effect2(self, object_name):
+        target_widget = self.findChild(QWidget, object_name)
+        if target_widget:
+            shadow_effect = QGraphicsDropShadowEffect(self)
+            shadow_effect.setBlurRadius(6)  # 그림자 퍼짐 정도
+            shadow_effect.setXOffset(0)  # X축 이동
+            shadow_effect.setYOffset(0)  # Y축 이동
             shadow_effect.setColor(QColor(0, 0, 0, 180))  # 그림자 색상 (검정색, 투명도 160)
             
             target_widget.setGraphicsEffect(shadow_effect)
