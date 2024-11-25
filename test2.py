@@ -30,6 +30,9 @@ DARK_MODE_STYLE = """
         color: white;  /* 텍스트는 흰색 */
         border: 1px solid #444; /* 약간의 테두리 */
     }
+    #loopAni_label {
+        background-color: #161926;
+    }
 """
 LIGHT_MODE_STYLE = """
     QWidget {
@@ -44,7 +47,7 @@ LIGHT_MODE_STYLE = """
     }
     QLabel {
         background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
-                                    stop: 0 #ffe4e1, stop: 1 #f0f8ff); /* 밝은 그라데이션 */
+                                    stop: 0 #ffe4e1, stop: 1 #AACFE7); /* 밝은 그라데이션 */
         color: black;  /* 텍스트 색상 */
     }
     #textlabel_2, #textlabel_3, #textlabel_4 {
@@ -52,6 +55,9 @@ LIGHT_MODE_STYLE = """
     }
     QTextEdit {
         background-color: #F3F4F1;
+    }
+    #loopAni_label {
+        background-color: #FFFFFF;
     }
 """
 

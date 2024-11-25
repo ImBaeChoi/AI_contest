@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>365</width>
-    <height>944</height>
+    <height>543</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -106,7 +106,7 @@ border-radius: 50px;</string>
      <x>-38</x>
      <y>360</y>
      <width>441</width>
-     <height>611</height>
+     <height>681</height>
     </rect>
    </property>
    <property name="styleSheet">
