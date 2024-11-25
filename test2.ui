@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>365</width>
-    <height>543</height>
+    <height>944</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,11 +18,7 @@
     <normaloff>../사진 및 그림/icon.png</normaloff>../사진 및 그림/icon.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">
-border-top-left-radius: 100px;
-border-top-right-radius: 100px;
-border-bottom-left-radius: 0px;
-border-bottom-right-radius: 0px;</string>
+   <string notr="true"/>
   </property>
   <widget class="QLabel" name="program_name">
    <property name="geometry">
@@ -110,7 +106,7 @@ border-radius: 50px;</string>
      <x>-38</x>
      <y>360</y>
      <width>441</width>
-     <height>871</height>
+     <height>611</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -127,7 +123,7 @@ padding: 10px;</string>
      <x>32</x>
      <y>450</y>
      <width>301</width>
-     <height>68</height>
+     <height>55</height>
     </rect>
    </property>
    <property name="font">
@@ -137,10 +133,45 @@ padding: 10px;</string>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-color:#111111;
-border-radius: 25px;
-padding: 5px;
-margin: 0px;</string>
+    <string notr="true">QTextEdit {
+    border-radius: 25px; /* 둥근 모서리 */
+    padding: 10px; /* 안쪽 여백 */
+    margin: 0px;
+}
+
+QScrollBar:vertical {
+    border: none;
+    background: #e6e6e6; /* 스크롤바 배경 */
+    width: 12px; /* 스크롤바 너비 */
+    margin: 0px; /* 스크롤바가 위아래로 딱 붙게 설정 */
+    border-radius: 6px; /* 둥근 모서리 */
+}
+
+QScrollBar::handle:vertical {
+    background: #cccccc; /* 핸들 색상 */
+    min-height: 20px; /* 핸들의 최소 높이 */
+    border-radius: 6px; /* 둥근 모서리 */
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #b3b3b3; /* 핸들 호버 시 색상 */
+}
+
+QScrollBar::handle:vertical:pressed {
+    background: #999999; /* 핸들 클릭 시 색상 */
+}
+
+QScrollBar::sub-line:vertical,
+QScrollBar::add-line:vertical {
+    border: none;
+    background: none; /* 화살표 버튼 숨기기 */
+    height: 0px; /* 높이를 0으로 설정 */
+}
+
+QScrollBar::add-page:vertical, 
+QScrollBar::sub-page:vertical {
+    background: none; /* 핸들 아래와 위 영역 제거 */
+}</string>
    </property>
    <property name="sizeAdjustPolicy">
     <enum>QAbstractScrollArea::AdjustToContents</enum>
@@ -157,9 +188,9 @@ p, li { white-space: pre-wrap; }
    <property name="geometry">
     <rect>
      <x>32</x>
-     <y>550</y>
+     <y>552</y>
      <width>301</width>
-     <height>68</height>
+     <height>55</height>
     </rect>
    </property>
    <property name="font">
@@ -169,10 +200,45 @@ p, li { white-space: pre-wrap; }
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-color:#111111;
-border-radius: 25px;
-padding: 5px;
-margin: 0px;</string>
+    <string notr="true">QTextEdit {
+    border-radius: 25px; /* 둥근 모서리 */
+    padding: 5px; /* 안쪽 여백 */
+    margin: 0px;
+}
+
+QScrollBar:vertical {
+    border: none;
+    background: #e6e6e6; /* 스크롤바 배경 */
+    width: 12px; /* 스크롤바 너비 */
+    margin: 0px; /* 스크롤바가 위아래로 딱 붙게 설정 */
+    border-radius: 6px; /* 둥근 모서리 */
+}
+
+QScrollBar::handle:vertical {
+    background: #cccccc; /* 핸들 색상 */
+    min-height: 20px; /* 핸들의 최소 높이 */
+    border-radius: 6px; /* 둥근 모서리 */
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #b3b3b3; /* 핸들 호버 시 색상 */
+}
+
+QScrollBar::handle:vertical:pressed {
+    background: #999999; /* 핸들 클릭 시 색상 */
+}
+
+QScrollBar::sub-line:vertical,
+QScrollBar::add-line:vertical {
+    border: none;
+    background: none; /* 화살표 버튼 숨기기 */
+    height: 0px; /* 높이를 0으로 설정 */
+}
+
+QScrollBar::add-page:vertical, 
+QScrollBar::sub-page:vertical {
+    background: none; /* 핸들 아래와 위 영역 제거 */
+}</string>
    </property>
    <property name="html">
     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -188,7 +254,7 @@ p, li { white-space: pre-wrap; }
      <x>32</x>
      <y>654</y>
      <width>301</width>
-     <height>275</height>
+     <height>262</height>
     </rect>
    </property>
    <property name="font">
@@ -198,10 +264,45 @@ p, li { white-space: pre-wrap; }
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-color:#111111;
-border-radius: 25px;
-padding: 5px;
-margin: 0px;</string>
+    <string notr="true">QTextEdit {
+    border-radius: 25px; /* 둥근 모서리 */
+    padding: 5px; /* 안쪽 여백 */
+    margin: 0px;
+}
+
+QScrollBar:vertical {
+    border: none;
+    background: #e6e6e6; /* 스크롤바 배경 */
+    width: 12px; /* 스크롤바 너비 */
+    margin: 0px; /* 스크롤바가 위아래로 딱 붙게 설정 */
+    border-radius: 6px; /* 둥근 모서리 */
+}
+
+QScrollBar::handle:vertical {
+    background: #cccccc; /* 핸들 색상 */
+    min-height: 20px; /* 핸들의 최소 높이 */
+    border-radius: 6px; /* 둥근 모서리 */
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #b3b3b3; /* 핸들 호버 시 색상 */
+}
+
+QScrollBar::handle:vertical:pressed {
+    background: #999999; /* 핸들 클릭 시 색상 */
+}
+
+QScrollBar::sub-line:vertical,
+QScrollBar::add-line:vertical {
+    border: none;
+    background: none; /* 화살표 버튼 숨기기 */
+    height: 0px; /* 높이를 0으로 설정 */
+}
+
+QScrollBar::add-page:vertical, 
+QScrollBar::sub-page:vertical {
+    background: none; /* 핸들 아래와 위 영역 제거 */
+}</string>
    </property>
    <property name="html">
     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -217,7 +318,7 @@ p, li { white-space: pre-wrap; }
      <x>21</x>
      <y>441</y>
      <width>323</width>
-     <height>86</height>
+     <height>73</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -233,7 +334,7 @@ p, li { white-space: pre-wrap; }
      <x>21</x>
      <y>543</y>
      <width>323</width>
-     <height>86</height>
+     <height>73</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -249,7 +350,7 @@ p, li { white-space: pre-wrap; }
      <x>21</x>
      <y>645</y>
      <width>323</width>
-     <height>293</height>
+     <height>280</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -259,26 +360,13 @@ p, li { white-space: pre-wrap; }
     <string/>
    </property>
   </widget>
-  <widget class="QPushButton" name="testbtn">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>10</y>
-     <width>93</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>테스트버튼</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="loopAni">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>339</y>
-     <width>45</width>
-     <height>45</height>
+     <x>165</x>
+     <y>344</y>
+     <width>35</width>
+     <height>35</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -298,7 +386,6 @@ border-radius: 50px;</string>
   <zorder>textEdit</zorder>
   <zorder>textEdit_2</zorder>
   <zorder>textEdit_3</zorder>
-  <zorder>testbtn</zorder>
   <zorder>toolButton</zorder>
   <zorder>loopAni</zorder>
   <zorder>hidden_mic_btn</zorder>

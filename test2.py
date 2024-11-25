@@ -63,11 +63,10 @@ class WindowClass(QMainWindow, form_class):
         super().__init__()
         self.setupUi(self)
 
-        self.apply_external_font("textEdit", "EliceDigitalCodingverH_Regular.ttf", font_size=10)
-        self.apply_external_font("textEdit_2", "EliceDigitalCodingverH_Regular.ttf", font_size=10)
-        self.apply_external_font("textEdit_3", "EliceDigitalCodingverH_Regular.ttf", font_size=10)
+        self.apply_external_font("textEdit", "AritaBuriKR-HairLine.ttf", font_size=15)
+        self.apply_external_font("textEdit_2", "AritaBuriKR-HairLine.ttf", font_size=15)
+        self.apply_external_font("textEdit_3", "AritaBuriKR-HairLine.ttf", font_size=15)
 
-        self.testbtn.clicked.connect(self.slide_out)
         self.slide_in()
 
         # 초기 라이트 모드로 설정
@@ -99,18 +98,12 @@ class WindowClass(QMainWindow, form_class):
         self.timer.timeout.connect(self.animate_gradient)
         self.timer.start(8)
 
-         # hidden_mic_btn 클릭 횟수 추적 초기화
-        self.hidden_mic_click_count = 0  # 클릭 횟수 초기화
-        self.hidden_mic_btn.clicked.connect(self.animate_widgets)
-        self.animations = []
-
         # 위젯에 그림자 효과 추가
         self.add_shadow_effect("textlabel_2")
         self.add_shadow_effect("textlabel_3")
         self.add_shadow_effect("textlabel_4")
         self.add_shadow_effect("toolButton")
         self.add_shadow_effect("loopAni_label")
-        self.add_shadow_effect("program_name",20)
         self.add_shadow_effect("textEdit",10)
         self.add_shadow_effect("textEdit_2",10)
         self.add_shadow_effect("textEdit_3",10)
@@ -118,32 +111,29 @@ class WindowClass(QMainWindow, form_class):
 
     # 텍스트 위젯 애니메이션
     def animate_widgets(self): 
-        self.hidden_mic_click_count += 1
+        widgets = [self.hidden_mic_btn, self.loopAni, self.textEdit, self.textEdit_2, self.textEdit_3,
+                self.text_label, self.textlabel_2, self.textlabel_3, self.textlabel_4, self.loopAni_label]
 
-        if self.hidden_mic_click_count == 1:
-            widgets = [self.hidden_mic_btn, self.loopAni, self.textEdit, self.textEdit_2, self.textEdit_3,
-                    self.text_label, self.textlabel_2, self.textlabel_3, self.textlabel_4, self.loopAni_label]
+        for widget in widgets:
+            y_start = widget.geometry().y()
+            x = widget.geometry().x()
+            width = widget.geometry().width()
+            height = widget.geometry().height()
 
-            for widget in widgets:
-                y_start = widget.geometry().y()
-                x = widget.geometry().x()
-                width = widget.geometry().width()
-                height = widget.geometry().height()
+            # 애니메이션 생성
+            animation = QPropertyAnimation(widget, b"geometry")
+            animation.setDuration(500)  # 애니메이션 지속 시간 (밀리초)
+            animation.setStartValue(QRect(x, y_start, width, height))
 
-                # 애니메이션 생성
-                animation = QPropertyAnimation(widget, b"geometry")
-                animation.setDuration(500)  # 애니메이션 지속 시간 (밀리초)
-                animation.setStartValue(QRect(x, y_start, width, height))
+            # 특정 위젯에 대해 다른 애니메이션 설정
+            if widget in [self.hidden_mic_btn, self.loopAni, self.text_label, self.loopAni_label]:
+                animation.setEndValue(QRect(x, y_start - 500, width, height))  # 더 멀리 이동
+            else:
+                animation.setEndValue(QRect(x, y_start - 400, width, height))  # 일반 이동
 
-                # 특정 위젯에 대해 다른 애니메이션 설정
-                if widget in [self.hidden_mic_btn, self.loopAni, self.text_label, self.loopAni_label]:
-                    animation.setEndValue(QRect(x, y_start - 500, width, height))  # 더 멀리 이동
-                else:
-                    animation.setEndValue(QRect(x, y_start - 400, width, height))  # 일반 이동
-
-                # 애니메이션 실행 및 저장
-                animation.start()
-                self.animations.append(animation)  # 애니메이션을 인스턴스 변수에 저장
+            # 애니메이션 실행 및 저장
+            animation.start()
+            self.animations.append(animation)  # 애니메이션을 인스턴스 변수에 저장
 
 
     def apply_rounded_corners(self, radius=20):  # 둥근 모서리 적용 함수
@@ -308,6 +298,7 @@ class WindowClass(QMainWindow, form_class):
         # 폰트 패밀리 가져오기
         font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
         font = QFont(font_family, font_size)
+        font.setBold(True)
 
         # 위젯 찾기
         text_edit = self.findChild(QTextEdit, widget_name)
