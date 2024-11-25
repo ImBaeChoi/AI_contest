@@ -110,6 +110,7 @@ class WindowClass(QMainWindow, form_class):
         self.add_shadow_effect("textlabel_4")
         self.add_shadow_effect("toolButton")
         self.add_shadow_effect("loopAni_label")
+        self.add_shadow_effect("loopAni",10)
         self.add_shadow_effect("textEdit",10)
         self.add_shadow_effect("textEdit_2",10)
         self.add_shadow_effect("textEdit_3",10)
