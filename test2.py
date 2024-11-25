@@ -66,27 +66,27 @@ class WindowClass(QMainWindow, form_class):
         self.testbtn.clicked.connect(self.slide_out)
         self.slide_in()
 
-        # 초기 모드 설정
+        # 초기 라이트 모드로 설정
         self.current_mode = "light"
         self.setStyleSheet(LIGHT_MODE_STYLE)
 
-        # toolButton 초기 아이콘 설정
+        # 옵션 버튼 초기 아이콘 설정(라이트)
         self.update_toolbutton_icon()
 
         # 상단 바 제거
         self.setWindowFlag(Qt.FramelessWindowHint)
 
-        # 둥근 모서리 적용
+        # 메인 창 둥근 모서리 적용
         self.apply_rounded_corners()
         
         # 상태 저장 변수 추가
         self.dialog_toggle_states = {"toggle_btn1": False, "toggle_btn2": False}
         self.options_dialog = None
 
-        # toolButton 클릭 시 대화 상자 열거나 닫기
+        # toolButton 클릭 시 옵션 UI 열기, 닫기
         self.toolButton.clicked.connect(self.toggle_options_dialog)
 
-        #애니메이션 관리
+        # 루프 애니메이션 관리
         self.make_widget_rounded(self.loopAni)
         self.gradient_offset = 0
         self.update_gradient()
@@ -99,7 +99,7 @@ class WindowClass(QMainWindow, form_class):
         self.hidden_mic_btn.clicked.connect(self.animate_widgets)
         self.animations = []
 
-        # 여러 위젯에 그림자 효과 추가
+        # 위젯에 그림자 효과 추가
         self.add_shadow_effect("textlabel_2")
         self.add_shadow_effect("textlabel_3")
         self.add_shadow_effect("textlabel_4")
@@ -108,11 +108,11 @@ class WindowClass(QMainWindow, form_class):
         self.add_shadow_effect("program_name")
 
 
-    # 텍스트 레이블 애니메이션
+    # 텍스트 위젯 애니메이션
     def animate_widgets(self): 
         self.hidden_mic_click_count += 1
 
-        if self.hidden_mic_click_count == 1:  # 두 번째 클릭 시 애니메이션 실행
+        if self.hidden_mic_click_count == 1:
             widgets = [self.hidden_mic_btn, self.loopAni, self.textEdit,self.textEdit_2,self.textEdit_3, self.text_label, self.textlabel_2,self.textlabel_3,self.textlabel_4]
 
             for widget in widgets:
@@ -138,11 +138,8 @@ class WindowClass(QMainWindow, form_class):
         region = QRegion(path.toFillPolygon().toPolygon())
         self.setMask(region)
 
-    def resizeEvent(self, event):  # 창 크기 변경 시 둥근 모서리 재적용
-        super().resizeEvent(event)
-        self.apply_rounded_corners()
-
-    def open_new_dialog(self, dialog_class): #새 다이어로그 열기
+        # 새 UI 열기
+    def open_new_dialog(self, dialog_class):
         self.options_dialog = dialog_class(self.current_mode, self.dialog_toggle_states, self)
         main_window_geometry = self.geometry()
         x = main_window_geometry.x() - self.options_dialog.width() - 10
@@ -163,16 +160,16 @@ class WindowClass(QMainWindow, form_class):
 
         self.update_toolbutton_icon()
      
+        # 루프 애니메이션 설정 함수
     def animate_gradient(self):
-        """그라데이션을 매끄럽게 주기적으로 업데이트"""
         self.gradient_offset += 0.002  # 매우 작은 값으로 점진적으로 증가
         if self.gradient_offset >= 3.0:  # 더 큰 범위를 사용하여 자연스러운 순환
             self.gradient_offset -= 3.0  # 주기를 초과하면 순환되도록 설정
 
         self.update_gradient()
 
+        # 루프 애니메이션 색상 설정 함수
     def update_gradient(self):
-        """loopAni 위젯에 그라데이션 색상 업데이트"""
         gradient = QLinearGradient(0, 0, self.loopAni.width(), self.loopAni.height())
 
         if self.current_mode == "light":
@@ -191,8 +188,8 @@ class WindowClass(QMainWindow, form_class):
         self.loopAni.setAutoFillBackground(True)
         self.loopAni.setPalette(palette)
 
+        # 루프 애니메이션 모양 설정
     def make_widget_rounded(self, widget, radius=50):
-        """위젯의 모양을 둥글게 설정"""
         rect = widget.geometry()
         path = QPainterPath()
         path.addRoundedRect(0, 0, rect.width(), rect.height(), radius, radius)
@@ -214,9 +211,8 @@ class WindowClass(QMainWindow, form_class):
             self.dialog_toggle_states = self.options_dialog.get_toggle_states()
             self.options_dialog = None
 
+        # 위젯 그림자 함수
     def add_shadow_effect(self, object_name):
-        """지정된 objectName의 위젯에 그림자 효과를 추가"""
-        # objectName에 해당하는 위젯 찾기
         target_widget = self.findChild(QWidget, object_name)
         if target_widget:
             shadow_effect = QGraphicsDropShadowEffect(self)
@@ -237,7 +233,7 @@ class WindowClass(QMainWindow, form_class):
 
         # 애니메이션 시작 위치
         start_x = screen_width+10
-        start_y = screen_height - window_height - 25  # 화면 중앙 기준
+        start_y = screen_height - window_height - 25
 
         # 최종 위치
         end_x = screen_width - window_width
@@ -274,19 +270,21 @@ class WindowClass(QMainWindow, form_class):
         self.animation.setEndValue(QRect(end_x, end_y, window_width, window_height))
         self.animation.setEasingCurve(QEasingCurve.OutCubic)
 
+        # slide_out시 옵션 창이 켜져있으면 옵션 창 닫기
         if self.options_dialog and self.options_dialog.isVisible():
             self.options_dialog.close()
             self.options_dialog = None
         
         self.animation.start()
 
+        # 다크 / 라이트 모드 별 옵션 버튼 icon 변경
     def update_toolbutton_icon(self):
-        """다크 모드/라이트 모드에 따라 toolButton 아이콘 변경"""
         if self.current_mode == "light":
             self.toolButton.setIcon(QIcon("light_mode_icon.png"))
         else:
             self.toolButton.setIcon(QIcon("dark_mode_icon.png"))
 
+# 옵션 창 클래스
 class CustomDialog(QDialog, options_dialog_form_class):
     def __init__(self, current_mode, toggle_states, main_window):
         super().__init__()
@@ -366,6 +364,7 @@ class CustomDialog(QDialog, options_dialog_form_class):
 
         if button == self.toggle_btn1:
             self.toggle_mode()
+        #else: (mute 기능 함수 호출)
 
     def toggle_mode(self):  # 다크 모드/라이트 모드 전환
         if self.current_mode == "light":
