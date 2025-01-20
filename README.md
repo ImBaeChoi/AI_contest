@@ -1,4 +1,13 @@
-Generative AI Contest Project.
-api_key.txt, message_history.json, win.ui, dark_mode_icon.png, EliceDigitalCodingverH_Regular.tff, icon.ico, light_mode_icon.png, options_dialog.ui 는 AI_contest_develop 폴더 안 data 라는 폴더를 생성해서 넣어주세요
-api_key.txt에 API 키를 입력하세요.
-Vesta를 실행시키려면 Ctrl+F1+F2를 입력하세요.
+
+# Vesta
+
+Vesta는 인공지능 비서 프로그램으로 GPT 모델을 기반으로 하여 사용자의 PC에서 네트워크, 시스템, 파일 관리 및 개발 작업, 정보검색을 도와줍니다.
+
+## Team Reverse
+
+- 응용 프로그래머: ImBaeChoi
+- 디자이너: SiYeon0405
+- 프롬프터 엔지니어링: Emerald1280
+- 리드 프로그래머: Garmin055
+
+
