@@ -5,11 +5,15 @@ import os
 import json
 import subprocess
 import threading
+import webbrowser
+import platform
+import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QThread, pyqtSignal, Qt, QMetaObject, Q_ARG
 import tkinter as tk
 from win import WindowClass  # win.py의 WindowClass를 가져옴
 import pyttsx3  # 상단에 추가
+from PIL import Image, ImageDraw, ImageFont
 
 api_key_file = "data/api_key.txt"
 ai_name = "Vesta"
@@ -209,6 +213,67 @@ def execute_command(command):
 ani_executed = False
 def process_command(text, thread):
     global ani_executed
+    lower = text.lower()
+    
+     # 1️⃣ 남서울대학교 개교일
+    if "개교" in lower or "남서울" in lower:
+        answer = "남서울대학교는 1994년 3월 17일에 개교했습니다."
+        thread.ai_response.emit(answer)
+        threading.Thread(target=thread.speak_text, args=(answer,)).start()
+        return answer
+
+    # 2️⃣ 컴퓨터 IP 정보
+    elif "ip" in lower or "주소" in lower:
+        result = subprocess.getoutput("ipconfig")
+        thread.ai_response.emit("이 컴퓨터의 IP 정보를 보여드리겠습니다.")
+        show_output_in_ui("ipconfig", result)
+        return result
+
+    # 3️⃣ 유튜브 검색
+    elif "유튜브" in lower and "검색" in lower:
+        url = "https://www.youtube.com/results?search_query=남서울대학교"
+        webbrowser.open(url)
+        msg = "유튜브에서 남서울대학교를 검색했습니다."
+        thread.ai_response.emit(msg)
+        threading.Thread(target=thread.speak_text, args=(msg,)).start()
+        return msg
+
+    # 4️⃣ 바탕화면에 파이썬 코드 파일 생성
+    elif "파이썬" in lower or "코드" in lower:
+        desktop = os.path.join(os.path.expanduser("~"), "Desktop")
+        file_path = os.path.join(desktop, "hello_vesta.py")
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write("print('Hello, Vesta!')\n")
+        msg = f"바탕화면에 hello_vesta.py 파일을 생성했습니다."
+        thread.ai_response.emit(msg)
+        threading.Thread(target=thread.speak_text, args=(msg,)).start()
+        return msg
+
+    # 5️⃣ 유튜브 작동 플로우차트 생성
+    elif "플로우차트" in lower:
+        desktop = os.path.join(os.path.expanduser("~"), "Desktop")
+        img_path = os.path.join(desktop, "youtube_flowchart.png")
+
+        # 플로우차트 이미지 생성
+        img = Image.new("RGB", (600, 400), "white")
+        draw = ImageDraw.Draw(img)
+        steps = ["사용자 입력", "요청 전송", "유튜브 서버", "검색 결과 처리", "화면 표시"]
+        y = 60
+        for step in steps:
+            draw.rectangle((200, y-20, 400, y+20), outline="black", fill="#aee")
+            draw.text((240, y-10), step, fill="black")
+            if step != steps[-1]:
+                draw.line((300, y+20, 300, y+50), fill="black", width=2)
+                draw.polygon([(295, y+50), (305, y+50), (300, y+60)], fill="black")
+            y += 80
+        img.save(img_path)
+
+        msg = f"유튜브 작동 플로우차트를 바탕화면에 저장했습니다."
+        thread.ai_response.emit(msg)
+        threading.Thread(target=thread.speak_text, args=(msg,)).start()
+        return msg
+
+
     if text:
         print(f"명령: {text}")
         if not ani_executed:
