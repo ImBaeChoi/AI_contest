@@ -4,6 +4,7 @@ import os
 import subprocess
 import threading
 import webbrowser
+import time
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QThread, pyqtSignal, Qt, QMetaObject, Q_ARG
 import tkinter as tk
@@ -93,7 +94,7 @@ def recognize_speech():
             _ = r.recognize_google(audio, language='ko-KR')
         except:
             pass
-    return "voice_input"
+    return "생각 중..."
 
 
 def process_command(text, thread):
@@ -112,6 +113,12 @@ def process_command(text, thread):
     current_index += 1
 
     print(f"\n사용자: {question}")
+
+    # 명령별 대기 시간 설정
+    delays = [1.2, 2.5, 1.8, 2.0, 3.0]
+    wait_time = delays[idx]
+    print(f"Vesta가 생각 중...)")
+    time.sleep(wait_time)
 
     if idx == 0:
         answer = "남서울대학교는 1994년 3월 17일에 개교했습니다."
@@ -145,7 +152,7 @@ def process_command(text, thread):
         thread.ai_response.emit(answer)
         return answer
 
-    else:
+    else:  # idx == 4
         desktop = os.path.join(os.path.expanduser("~"), "Desktop")
         img_path = os.path.join(desktop, "youtube_flowchart.png")
 
@@ -154,7 +161,6 @@ def process_command(text, thread):
         draw = ImageDraw.Draw(img)
         steps = ["사용자 입력", "요청 전송", "유튜브 서버", "검색 결과 처리", "화면 표시"]
 
-        # 한글 폰트 지정(Windows)
         try:
             font = ImageFont.truetype("C:/Windows/Fonts/malgun.ttf", 16)
         except Exception:
